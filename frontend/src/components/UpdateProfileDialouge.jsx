@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 
 const UpdateProfileDialouge = ({ openProfile, setOpenProfile }) => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
 
@@ -53,7 +55,7 @@ const UpdateProfileDialouge = ({ openProfile, setOpenProfile }) => {
     console.log("FormData before API call:", Object.fromEntries(formData)); // Debugging log
 
     try {
-      const res = await axios.post("/api/v1/user/updateProfile", formData, {
+      const res = await axios.post(`${backendUri}/api/v1/user/updateProfile`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -7,7 +7,7 @@ const ProtectedRoute = ({children}) => {
     const {user} = useSelector((store) => store.auth)
     useEffect(() => {
         if(user === null){
-            navigate("/dashboard")
+            navigate("/")
         }
     },[])
   return (

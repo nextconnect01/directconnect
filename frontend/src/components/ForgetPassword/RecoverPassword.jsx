@@ -7,6 +7,8 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const RecoverPassword = () => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const params = useParams();
   const id = params.id; // Token from the URL params
   const [input, setInput] = useState({
@@ -24,7 +26,7 @@ const RecoverPassword = () => {
 
     try {
       const res = await axios.post(
-        "/api/v1/user/recover-password",
+        `${backendUri}/api/v1/user/recover-password`,
         { password: input.password }, // Send plain JSON
         {
           headers: {

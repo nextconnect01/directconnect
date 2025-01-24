@@ -2,8 +2,10 @@ import React from "react";
 import Navbar from "./shared/Navbar";
 import { Button } from "./ui/button";
 import Footer from "./shared/Footer";
+import { useNavigate } from "react-router-dom";
 
 const Offering = () => {
+  const navigate = useNavigate();
   return (
     <div className="w-full">
       <div className="relative h-screen">
@@ -11,7 +13,7 @@ const Offering = () => {
         <div
           className="absolute top-0 left-0 w-full h-[90%] bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/homeCard3.jpeg')",
+            backgroundImage: "url('/images/pexels-fauxels-3184357.jpg')",
           }}
         >
           {/* Dimming effect */}
@@ -34,9 +36,12 @@ const Offering = () => {
           <h1>Explore Our Key Offerings</h1>
         </div>
         <div className="text-center text-sm md:text-base lg:text-xl">
-          <p>Discover a range of services designed to facilitate</p>
-          <p>seamless freelance collaborations while ensuring a</p>
-          <p>commission-free experience for all users.</p>
+          <p className="px-12">
+            Discover how Next Connect simplifies freelancing while creating
+            opportunities for growth an meaningful connections. We’re redefining
+            the way freelancers and clients work together —no hidden fees, no
+            competition, just genuine support.
+          </p>
         </div>
       </div>
 
@@ -48,15 +53,22 @@ const Offering = () => {
             alt=""
           />
           <div className="text-center lg:text-left flex flex-col max-w-md gap-10">
-            <h1 className="font-bold text-2xl"> <span className="text-blue-500 mr-5">01  </span>No Commission</h1>
+            <h1 className="font-bold text-2xl">
+              {" "}
+              <span className="text-blue-500 mr-5">01 </span>No Commission
+            </h1>
             <p>
-              Our platform provides a user-friendly interface where freelancers
-              can showcase their skills, facilitating easy discovery by
-              potential clients. This streamlined process enhances connections
-              without any commission fees, empowering both parties.
+              We believe your hard-earned money belongs to you. That’s why we’ve
+              removed commission fees entirely. With Next Connect, you keep
+              everything you earn while connecting directly with clients or
+              freelancers who value your work.
             </p>
-            <Button className="bg-[#2164f3] hover:bg-white hover:text-black">
-              Get Started
+
+            <Button
+              className="bg-[rgb(33,100,243)] text-sm md:text-lg px-5 md:px-7 py-3 md:py-5 font-bold hover:bg-white hover:text-black"
+              onClick={() => navigate("/SignUp")}
+            >
+              Get Started - Take Control Over your Earning
             </Button>
           </div>
         </div>
@@ -70,16 +82,23 @@ const Offering = () => {
             alt=""
           />
           <div className="text-center lg:text-left flex flex-col max-w-md gap-10">
-            <h1 className="font-bold text-2xl"><span className="text-blue-500 mr-5">02  </span>   Community Engagement</h1>
+            <h1 className="font-bold text-2xl">
+              <span className="text-blue-500 mr-5">02 </span> Community
+              Engagement
+            </h1>
             <p>
-              We offer tailored project management tools that simplify
-              communication and workflow between freelancers and clients. Our
-              features include real-time updates and task tracking, ensuring
-              that projects stay on schedule and within budget without added
-              costs.
+              Freelancing doesn’t have to be isolating. Our platform fosters a
+              vibrant, supportive community where freelancers and clients can
+              share updates, ask questions, and grow together. Stay on track
+              with built-in tools that fit your schedule and simplify
+              collaboration
             </p>
-            <Button className="bg-[#2164f3] hover:bg-white hover:text-black">
-              Get Started
+
+            <Button
+              onClick={() => navigate("/SignUp")}
+              className="bg-[rgb(33,100,243)] text-sm md:text- px-3 md:px-5 py-3 md:py-3 font-bold hover:bg-white hover:text-black"
+            >
+              Join The Conversation - Be A Part Of Something Bigger
             </Button>
           </div>
         </div>
@@ -93,16 +112,23 @@ const Offering = () => {
             alt=""
           />
           <div className="text-center  lg:text-left flex flex-col max-w-md gap-10">
-            <h1 className="font-bold text-2xl"><span className="text-blue-500 mr-5">03  </span>Interactive Learning</h1>
+            <h1 className="font-bold text-2xl">
+              <span className="text-blue-500 mr-5">03 </span>Interactive
+              Learning
+            </h1>
             <p>
-              Our community forums provide a vibrant space for freelancers and
-              clients to engage, share insights, and seek feedback. This
-              collaborative environment fosters professional growth and
-              strengthens relationships within the community, setting us apart
-              from traditional platforms.
+              Your journey shouldn’t stop at “good enough.” Through mentorship
+              programs, workshops, and resources, we’re here to help you level
+              up. Whether you’re a seasoned freelancer or just starting out,
+              you’ll find the guidance you need to grow your skills and achieve
+              your goals.
             </p>
-            <Button className="bg-[#2164f3] hover:bg-white hover:text-black">
-              Get Started
+
+            <Button
+              onClick={() => navigate("/SignUp")}
+              className="bg-[rgb(33,100,243)] text-sm md:text-lg px-5 md:px-7 py-3 md:py-5 font-bold hover:bg-white hover:text-black"
+            >
+              Learn And Grow - Start your Next Chapter
             </Button>
           </div>
         </div>
@@ -125,10 +151,12 @@ const Offering = () => {
                   textShadow: "2px 2px 4px rgba(0, 0, 0, 0.9)",
                 }}
               >
-                <p>Direct Connect has transformed my freelancing</p>
-                <p>experience, making collaboration effortless and</p>
-                <p>rewarding. I feel valued and understood without</p>
-                <p>worrying about commission fees.</p>
+                <p className="px-12 text-center">
+                  Take the next step in your freelancing journey with Direct
+                  Connect. Whether you’re a client seeking reliable talent or a
+                  freelancer looking for opportunities, our platform is designed
+                  to help you do well—together
+                </p>
               </h1>
               <h3
                 className="text-[#FCFCFC] text-lg md:text-xl lg:text-2xl font-bold text-center"
@@ -136,9 +164,58 @@ const Offering = () => {
                   textShadow: "2px 2px 4px rgba(0, 0, 0, 0.9)",
                 }}
               >
-                Sarah Johnson
+                Join Our Community Today
               </h3>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-center items-center gap-3 px-9 mt-10">
+        <h1 className="font-bold text-5xl">Why Choose Next Connect</h1>
+        <p className="text-lg text-justify">
+          At Next Connect, we’ve reimagined freelancing to focus on what truly
+          matters: trust, collaboration, and giving everyone the tools they need
+          to succeed. Say goodbye to confusing fees and hidden costs—our
+          platform is built on transparency. What you earn is what you keep,
+          with no commission fees eating into your hard work. Whether you’re a
+          freelancer or a client, you’ll always know exactly where your money is
+          going, so you can focus on what really matters—getting the job done.
+        </p>
+        <div className="flex flex-col md:flex-row justify-center mt-12 gap-6">
+          <div className="flex flex-col justify-center items-center gap-4 w-full md:w-1/2 px-4">
+            <img
+              className="w-full max-w-md object-cover rounded-lg"
+              src="/images/homeSecondLast.jpg"
+              alt=""
+            />
+            <h1 className="font-bold text-xl">Transparency</h1>
+            <p>
+              Say goodbye to confusing fees and hidden costs—our platform is
+              built on transparency. What you earn is what you keep, with no
+              commission fees eating into your hard work. Whether you’re a
+              freelancer or a client, you’ll always know exactly where your
+              money is going, so you can focus on what really matters—getting
+              the job done.
+            </p>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-4 w-full md:w-1/2 px-4">
+            <img
+              className="w-full max-w-md object-cover rounded-lg"
+              src="/images/pexels-canvastudio-3277808.jpg"
+              alt=""
+            />
+            <h1 className="font-bold text-xl">Seamless Collaboration</h1>
+            <p>
+              Freelancing often feels like a tug-of-war, but Next Connect
+              changes that. Our tools make collaboration seamless, helping
+              freelancers and clients align goals, share ideas, and build
+              lasting relationships. It’s about working together, not against
+              each other. Plus, freelancing doesn’t have to be lonely—our
+              community connects, supports, and celebrates each other. Next
+              Connect makes freelancing simpler, fairer, and more rewarding.
+              Ready to join a movement that works for you? Let’s get started.
+            </p>
           </div>
         </div>
       </div>

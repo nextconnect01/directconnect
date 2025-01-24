@@ -16,6 +16,8 @@ import { setUser } from "@/redux/authSlice";
 import { toast } from "sonner";
 
 const UpdatePhotoDialouge = ({ openPhoto, setOpenPhoto }) => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const { user } = useSelector((store) => store.auth);
   console.log("User in UpdatePhotoDialouge:", user); // Log updated user profile
 
@@ -37,7 +39,7 @@ const UpdatePhotoDialouge = ({ openPhoto, setOpenPhoto }) => {
     }
 
     try {
-      const res = await axios.post("/api/v1/user/updateFiles", formData, {
+      const res = await axios.post(`${backendUri}/api/v1/user/updateFiles`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

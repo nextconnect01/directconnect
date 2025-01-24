@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 const useGetBlogById = () => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const params = useParams()
   const blogId = params.id
 
@@ -13,7 +15,7 @@ const useGetBlogById = () => {
   useEffect(() => {
     const fetchBlogById = async () => {
       try {
-        const res = await axios.get(`${BLOG_API_ENDPOINT}/getBlogById/${blogId}`, {
+        const res = await axios.get(`${backendUri}/api/v1/blog/getBlogById/${blogId}`, {
           withCredentials: true,
         });
         if (res.data.success) {

@@ -9,6 +9,8 @@ import { setUser } from "@/redux/authSlice";
 import useGetAllBlog from "@/hooks/useGetAllBlog";
 
 const Home = () => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   useGetAllBlog();
 
   const user = useSelector((state) => state.auth.user);
@@ -18,7 +20,7 @@ const Home = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/api/v1/user/profile", {
+        const res = await axios.get(`${backendUri}/api/v1/user/profile`, {
           withCredentials: true,
         });
         if (res.data.success) {
@@ -54,8 +56,12 @@ const Home = () => {
                 <span className="block">Experience</span>
               </h1>
               <p className="mt-8 font-bold text-[#FCFCFC] text-sm md:text-base">
-                Join A Commission-Free platform designed for seamless <br />
-                collaboration between freelancers and clients worldwide
+                Discover a platform where meaningful collaboration takes center
+                stage.
+                <p className="font-bold text-[#FCFCFC] text-sm md:text-base">
+                  Say goodbye to commissions and hello to opportunities that put
+                  your success first
+                </p>
               </p>
               <Button
                 onClick={() => navigate("/coming-soon")}
@@ -76,54 +82,59 @@ const Home = () => {
         </h1>
         <div className="flex flex-col items-center">
           <p className="text-base md:text-lg text-black text-center">
-            Discover a range of services designed to facilitate seamless
-            freelance collaborations while ensuring a commission-free
+          We’re here to redefine how freelancers and clients connect. Explore a suite of tools and feature
+          designed to help you succeed on your own terms
           </p>
-          <p className="text-lg md:text-xl text-black text-center">
-            experience for all users
+
+          <p className="mt-5 font-bold text-lg md:text-xl text-black text-center">
+            Empower Your Work, Your Way
           </p>
         </div>
       </div>
 
       {/* Key Offerings */}
       <div className="flex flex-wrap justify-around gap-10 mt-10 px-5">
-        <div className="max-w-sm flex flex-col gap-3 text-center">
+        <div className="max-w-sm flex flex-col gap-3 text-justify">
           <img
             className="w-full h-60 object-cover cursor-pointer rounded-md"
             src="/images/homeCard1.webp"
             alt="No Commission"
           />
-          <h1 className="font-bold text-xl">No Commission</h1>
+          <h1 className="font-bold text-xl text-center">No Commission</h1>
           <p>
             Experience complete transparency with our no-commission model.
             Maximise your earnings while enjoying direct communication with
             clients for better collaboration.
           </p>
         </div>
-        <div className="max-w-sm flex flex-col gap-3 text-center">
+        <div className="max-w-sm flex flex-col gap-3 text-justify">
           <img
             className="w-full h-60 object-cover cursor-pointer rounded-md"
             src="/images/homeCard2.webp"
             alt="Community Engagement"
           />
-          <h1 className="font-bold text-xl">Community Engagement</h1>
+          <h1 className="font-bold text-xl text-center">
+            Community Engagement
+          </h1>
           <p>
             Join a vibrant community of freelancers and clients. Engage in
-            forums, share feedback, and enhance your freelancing journey
-            through collective knowledge.
+            forums, share feedback, and enhance your freelancing journey through
+            collective knowledge.
           </p>
         </div>
-        <div className="max-w-sm flex flex-col gap-3 text-center">
+        <div className="max-w-sm flex flex-col gap-3 text-justify">
           <img
             className="w-full h-60 object-cover cursor-pointer rounded-md"
             src="/images/homeCard3.jpeg"
             alt="Interactive Learning"
           />
-          <h1 className="font-bold text-xl">Interactive Learning</h1>
+          <h1 className="font-bold text-xl text-center">
+            Interactive Learning
+          </h1>
           <p>
             Stay updated with our blogging section, featuring valuable tips and
-            insights. Learn from others and contribute to discussions that
-            drive your success.
+            insights. Learn from others and contribute to discussions that drive
+            your success.
           </p>
         </div>
       </div>
@@ -136,20 +147,23 @@ const Home = () => {
             src="/images/homeBottom.jpg"
             alt="Vision"
           />
-          <div className="flex flex-col items-center max-w-lg">
+          <div className="flex flex-col  items-center max-w-lg">
             <h1 className="text-3xl md:text-5xl font-bold">
-              Discover The Vision Behind Direct Connect
+              Discover The Vision Behind Next Connect
             </h1>
-            <p className="mt-7 text-sm md:text-base leading-relaxed">
-              With years of experience in the freelancing industry, Direct
-              Connect has developed a deep understanding of the challenges
-              faced by both freelancers and clients. Our commitment to a
-              commission-free model reflects our dedication to fostering
-              transparent, fair collaborations that empower all users.
+            <p className="mt-7 text-justify text-sm md:text-base leading-relaxed">
+              Built on years of experience in the freelancing world,{" "}
+              <span className="font-bold">Next Connect </span>
+              is more than a platform—it’s a movement. We believe in empowering
+              freelancers and clients to collaborate without barriers. Our
+              mission? To create a commission-free space where trust, growth,
+              and opportunity grow.
             </p>
-            <Button className="mt-7 py-4 md:py-6 bg-[#2164f3] hover:bg-white hover:text-black max-w-32 text-[#FCFCFC]">
-              Learn More
-            </Button>
+            <a target="blank" href="https://www.reddit.com/r/NEXTCONNECTHUB/">
+              <Button className="mt-7 text-lg font-bold px-10 py-4 md:py-6 bg-[#2164f3] hover:bg-white hover:text-black max-w-32 text-[#FCFCFC]">
+                Join Us
+              </Button>
+            </a>
           </div>
         </div>
       </div>
@@ -163,62 +177,83 @@ const Home = () => {
           <div className="absolute inset-0 bg-black opacity-80"></div>
           <div className="relative z-10 flex justify-center items-center h-full">
             <div className="flex flex-col gap-7 text-center">
-              <h1 className="text-[#FCFCFC] text-xl md:text-3xl font-bold" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.9)" }}>
-                Direct Connect transformed my freelancing career. I can focus
-                on my projects without worrying about hidden fees or commission
-                cuts.
+              <h1
+                className="text-[#FCFCFC] text-xl md:text-3xl font-bold"
+                style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.9)" }}
+              >
+                Alone, we can do so little; together, we can do so much
               </h1>
-              <h3 className="text-[#FCFCFC] text-lg md:text-2xl font-bold" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.9)" }}>
-                John Smith
+              <h3
+                className="text-[#FCFCFC] text-lg md:text-2xl font-bold"
+                style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.9)" }}
+              >
+                – Helen Keller
               </h3>
             </div>
           </div>
         </div>
       </div>
+      
+      {/*Why Choose Next Connect part*/}
+      <div className="flex flex-col gap-5 justify-center items-center mt-10">
+        <h1 className="font-bold text-5xl text-center">Why Choose Next</h1>
+        <h1 className="font-bold text-5xl text-center">Connect For Freelancing ?</h1>
+        <p className="font-bold text-3xl text-center">A Platform Built for You</p>
+        <p className="px-12 text-3xl text-center">We know the challenges freelancers and clients face. That’s why Next Connect is designed to 
+        make things easier, fairer, and more effective. Here’s how</p>
+      </div>
 
       {/* Transparent Transactions Section */}
       <div className="mt-14">
-        <div className="flex flex-wrap justify-center items-center gap-24 px-5">
-          <img
-            className="w-full max-w-md rounded-sm object-cover"
-            src="/images/homeSecondLast.jpg"
-            alt="Transparent Transactions"
-          />
-          <div className="flex flex-col max-w-sm gap-5">
-            <h1 className="font-bold text-xl">Transparent Transactions</h1>
-            <p>
-              Our platform is built on transparency, ensuring that every deal
-              is clear and straightforward. No hidden fees mean you keep what
-              you earn.
-            </p>
-            <Button className="bg-[#2164f3] hover:bg-white hover:text-black">
-              Learn More
-            </Button>
-          </div>
-        </div>
-      </div>
+  {/* Transparent Transactions Section */}
+  <div className="flex flex-wrap justify-center items-center gap-8 md:gap-24 px-5">
+    <img
+      className="w-full max-w-sm rounded-sm object-cover"
+      src="/images/homeSecondLast.jpg"
+      alt="Transparent Transactions"
+    />
+    <div className="flex flex-col items-center max-w-sm gap-4 md:gap-5">
+      <h1 className="font-bold text-lg md:text-xl text-center">
+        Transparent Transactions
+      </h1>
+      <p className="text-justify">
+        Enjoy seamless payments with no hidden fees or middlemen. You earn what
+        you work for, and clients pay what they agreed—simple as that.
+      </p>
+      <a href="https://www.reddit.com/r/NEXTCONNECTHUB/" target="blank">
+        <Button className="bg-[rgb(33,100,243)] text-sm md:text-lg px-5 md:px-7 py-3 md:py-5 font-bold hover:bg-white hover:text-black">
+          Join Us
+        </Button>
+      </a>
+    </div>
+  </div>
+</div>
 
-      {/* Seamless Collaboration Section */}
-      <div className="mt-10">
-        <div className="flex flex-wrap justify-center items-center gap-24 px-5">
-          <div className="flex flex-col justify-center  max-w-sm gap-5">
-            <h1 className="font-bold text-xl">Seamless Collaboration</h1>
-            <p>
-              Centralised communication tools empower freelancers and clients
-              to work closely together, fostering better project outcomes and
-              lasting relationships.
-            </p>
-            <Button className="bg-[#2164f3] hover:bg-white hover:text-black">
-              Learn More
-            </Button>
-          </div>
-          <img
-            className="w-full max-w-md rounded-sm object-cover"
-            src="/images/pexels-canvastudio-3277808.jpg"
-            alt="Seamless Collaboration"
-          />
-        </div>
-      </div>
+{/* Seamless Collaboration Section */}
+<div className="mt-14 md:mt-15">
+  <div className="flex flex-wrap justify-center items-center gap-8 md:gap-24 px-5">
+    <div className="flex flex-col justify-center items-center max-w-sm gap-4 md:gap-5">
+      <h1 className="font-bold text-lg md:text-xl text-center">
+        Seamless Collaboration
+      </h1>
+      <p className="text-justify">
+        Work smarter, not harder. Our tools make it easy to connect,
+        communicate, and deliver projects without unnecessary hassle.
+      </p>
+      <a href="https://www.reddit.com/r/NEXTCONNECTHUB/" target="blank">
+        <Button className="bg-[rgb(33,100,243)] text-sm md:text-lg px-5 md:px-7 py-3 md:py-5 font-bold hover:bg-white hover:text-black">
+          Join Us
+        </Button>
+      </a>
+    </div>
+    <img
+      className="w-full max-w-sm rounded-sm object-cover"
+      src="/images/pexels-canvastudio-3277808.jpg"
+      alt="Seamless Collaboration"
+    />
+  </div>
+</div>
+
 
       <Footer />
     </div>

@@ -20,16 +20,16 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/dashboard",
+      path: "/",
       element: <Home />,
     },
     {
       path: "/coming-soon",
-      element: <ProtectedRoute><ComingSoon/></ProtectedRoute>,
+      element: <ComingSoon/>,
     },
     {
       path: "/offering",
-      element: <ProtectedRoute><Offering /></ProtectedRoute>,
+      element: <Offering />,
     },
     {
       path: "/blog",
@@ -41,7 +41,7 @@ function App() {
     },
     {
       path: "/about",
-      element: <ProtectedRoute><About /></ProtectedRoute>,
+      element: <About />
     },
     {
       path: "/SignUp",
@@ -57,7 +57,7 @@ function App() {
     },
     {
       path : "/browse",
-      element : <ProtectedRoute><Browse/></ProtectedRoute>
+      element : <Browse/>
     },
     {
       path : "/forget-password",

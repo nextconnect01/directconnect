@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { setUser } from "@/redux/authSlice";
 
 const UpdateChangePassword = ({ resetPassword, setResetPassword }) => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const [input, setInput] = useState({
@@ -32,7 +34,7 @@ const UpdateChangePassword = ({ resetPassword, setResetPassword }) => {
     formData.append("password", input.password);
 
     try {
-      const res = await axios.post("api/v1/user/changePassword", formData, {
+      const res = await axios.post(`${backendUri}/api/v1/user/changePassword`, formData, {
         headers: {
           "Content-Type": "application/json",
         },

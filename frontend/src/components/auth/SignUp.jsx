@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import store from '@/redux/store'
 
 const SignUp = () => {
+    const backendUri = import.meta.env.VITE_BACKEND_URL;
     const {user,loading} = useSelector(store => store.auth)
    
     const navigate = useNavigate()
@@ -34,7 +35,7 @@ const SignUp = () => {
         formData.append("username" , input.username);
 
         try {
-            const res = await axios.post("/api/v1/user/register",formData,{
+            const res = await axios.post(`${backendUri}/api/v1/user/register`,formData,{
                 headers : {
                     "Content-Type" : "application/json"
                 },
@@ -116,8 +117,8 @@ const SignUp = () => {
                
             </div>
             <div className='flex flex-col gap-5 mt-5'>
-                <Button className = "bg-[#FCFCFC] text-[#2196F3] hover:bg-[#2164f3] hover:text-white" type = "submit" variant= "outline">Sign Up</Button>
-                <GoogleLoginButton onClick = {() => navigate("/dashboard")}/>
+                <Button className = "bg-[#2164f3] text-white hover:bg-[#2164f3] hover:text-white" type = "submit" variant= "outline">Sign Up</Button>
+                <GoogleLoginButton onClick = {() => navigate("/")}/>
             </div>
             </form>
             

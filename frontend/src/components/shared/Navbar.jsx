@@ -14,6 +14,8 @@ import { setUser } from "@/redux/authSlice";
 import { Menu, X } from "lucide-react";
 
 const Navbar = ({ textColor = "text-white" }) => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,11 +23,11 @@ const Navbar = ({ textColor = "text-white" }) => {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("/api/v1/user/logout", { withCredentials: true });
+      const res = await axios.get(`${backendUri}/api/v1/user/logout`, { withCredentials: true });
       if (res.data.success) {
         dispatch(setUser(null));
         toast.success(res.data.message);
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
@@ -36,8 +38,12 @@ const Navbar = ({ textColor = "text-white" }) => {
   return (
     <div className={`w-full ${textColor} px-4 py-3`}>
       <div className="flex justify-between items-center">
-        <h1 className="text-lg font-bold">Direct Connect</h1>
-
+        <div className="flex justify-center items-center gap-2">
+          
+        <img src="/images/logoFinal.png" alt="imagess"  className="max-w-14 rounded-lg object-cover"/>
+        <h1 className="text-xl font-bold">Next Connect</h1>
+        </div>
+        
         <div className="block lg:hidden">
           {isMobileMenuOpen ? (
             <X
@@ -52,8 +58,8 @@ const Navbar = ({ textColor = "text-white" }) => {
           )}
         </div>
 
-        <div className="hidden lg:flex gap-4">
-          <Link to="/dashboard">Home</Link>
+        <div className="hidden lg:flex gap-6">
+          <Link to="/">Home</Link>
           <Link to="/about">About</Link>
           <Link to="/offering">Offering</Link>
           <Link to="/blog">Blog</Link>
@@ -112,7 +118,7 @@ const Navbar = ({ textColor = "text-white" }) => {
 
       {isMobileMenuOpen && (
         <div className="flex flex-col gap-4 mt-4 lg:hidden">
-          <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
             Home
           </Link>
           <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>

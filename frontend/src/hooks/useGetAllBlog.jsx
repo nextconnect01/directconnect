@@ -5,6 +5,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useGetAllBlog = () => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const dispatch = useDispatch();
   const searchQuery = useSelector((state) => state.blog.searchQuery);
 
@@ -12,7 +14,7 @@ const useGetAllBlog = () => {
     const fetchAllBlogs = async () => {
       try {
         const res = await axios.get(
-          `${BLOG_API_ENDPOINT}/getAllBlog?keyword=${searchQuery}`,
+          `${backendUri}/api/v1/blog/getAllBlog?keyword=${searchQuery}`,
           { withCredentials: true }
         );
         if (res.data.success){

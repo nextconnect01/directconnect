@@ -15,6 +15,8 @@ import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 
 const UpdateProfileBio = ({ openBio, setOpenBio }) => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
   const [input, setInput] = useState({
@@ -42,7 +44,7 @@ const UpdateProfileBio = ({ openBio, setOpenBio }) => {
     formData.append("bio", input.bio);
 
     try {
-      const res = await axios.post("api/v1/user/updateProfile", formData, {
+      const res = await axios.post(`${backendUri}/api/v1/user/updateProfile`, formData, {
         headers: {
           "Content-Type": "application/json",
         },

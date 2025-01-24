@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
 const ForgetPasswordEmail = () => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const [input, setInput] = useState({
     email: "",
   });
@@ -23,7 +25,7 @@ const ForgetPasswordEmail = () => {
     formData.append("email", input.email);
 
     try {
-      const res = await axios.post("/api/v1/user/forget-password", formData, {
+      const res = await axios.post(`${backendUri}/api/v1/user/forget-password`, formData, {
         headers: {
           "Content-Type": "application/json",
         },

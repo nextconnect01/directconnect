@@ -29,7 +29,7 @@ const About = () => {
       {/* Content Section */}
       <div className="mt-10 flex flex-col w-full">
         <h1 className="text-center font-bold text-[#263238] text-3xl sm:text-3xl md:text-4xl mt-10">
-          Discover The Vision Behind Direct Connect
+          Discover The Vision Behind Next Connect
         </h1>
         <div>
           <div className="py-5 px-5 mt-10 w-full bg-[rgb(247,251,250)] border-s-black">
@@ -39,19 +39,18 @@ const About = () => {
                 src="/images/homeBottom.jpg"
                 alt=""
               />
-              <div className="flex flex-col justify-center text-center md:text-left">
+              <div className="flex flex-col justify-center text-justify md:text-justify">
                 <h1 className="text-3xl sm:text-xl font-bold">
-                  Direct Connect is a pioneering freelancing platform
+                  Collaboration is the key to unlocking the potential of every
+                  great idea.
                 </h1>
-                <h1 className="text-lg sm:text-xl font-bold">
-                  designed to elevate the collaboration experience
-                </h1>
+
                 <p className="mt-7 text-sm sm:text-base">
-                  Founded on the principle of fair transactions, Direct Connect
+                  Founded on the principle of fair transactions, Next Connect
                   emerged from the need for a commission-free freelancing
                   alternative. Our vision was clear: to empower freelancers with
-                  direct deals without hidden fees, transforming how they connect
-                  with clients.
+                  direct deals without hidden fees, transforming how they
+                  connect with clients.
                 </p>
                 <p className="mt-7 text-sm sm:text-base">
                   We have successfully served a diverse range of clients, from
@@ -70,33 +69,43 @@ const About = () => {
           <h1 className="font-bold text-3xl sm:text-3xl md:text-4xl">
             Our Core Values
           </h1>
-          <p className="text-center text-sm sm:text-base">
-            At Direct Connect, we uphold principles that guide our company and
-            foster a thriving freelance community.
+          <p className="text-center text-2xl  font-bold sm:text-base">
+            The foundation of Next Connect lies in the principles that guide
+            everything we do. These values define our commitment to creating a
+            better freelancing experience
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="flex flex-col gap-3 text-center md:text-left">
-              <h1 className="font-bold text-lg">Integrity</h1>
+              <h1 className="font-bold text-xl">Integrity</h1>
               <p className="text-sm sm:text-base">
-                We believe in maintaining honesty and openness in every
-                interaction, ensuring that our platform remains a trustworthy
-                space for freelancers and clients alike.
+                At Next Connect, honesty and transparency are at the heart of
+                every interaction. We ensure every user—freelancer or
+                client—feels secure, valued, and respected. Our no-commission
+                policy reflects our commitment to fairness, creating a platform
+                where everyone can focus o building genuine connections instead
+                of worrying about hidden costs or unfair practices
               </p>
             </div>
             <div className="flex flex-col gap-3 text-center md:text-left">
-              <h1 className="font-bold text-lg">Empowerment</h1>
+              <h1 className="font-bold text-xl">Empowerment</h1>
               <p className="text-sm sm:text-base">
-                Our mission is to empower freelancers and clients by providing
-                tools that enhance their collaboration experience, promoting
-                independence and growth for all users.
+                Empowerment drives our mission. We aim to give freelancers the
+                tools and opportunities to grow their careers without
+                restrictions, while clients gain access to a pool of talented
+                professionals who meet their needs. By fostering independence
+                and self-confidence, we hel you take charge of your freelancing
+                journey and make informed decisions that shape your success
               </p>
             </div>
             <div className="flex flex-col gap-3 text-center md:text-left">
-              <h1 className="font-bold text-lg">Innovation</h1>
+              <h1 className="font-bold text-xl">Innovation</h1>
               <p className="text-sm sm:text-base">
-                Continuous improvement and innovative solutions are at the heart
-                of our operations, allowing us to evolve and adapt to the
-                changing needs of the freelancing market.
+                Continuous improvement is essential to staying relevant in the
+                fast-changing freelance world. At Next Connect, we are
+                constantly refining our tools and services to meet your evolving
+                needs Whether it’s simplifying workflows or introducing new
+                features, we are dedicated to helpin freelancers and clients
+                work smarter, faster, and with greater ease.
               </p>
             </div>
           </div>

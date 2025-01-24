@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/authSlice";
 
 const Login = () => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL;
+
   const {user} = useSelector(store => store.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -33,7 +35,7 @@ const Login = () => {
     formData.append("password", input.password);
 
     try {
-      const res = await axios.post("/api/v1/user/login", formData, {
+      const res = await axios.post( `${backendUri}/api/v1/user/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -44,7 +46,7 @@ const Login = () => {
         dispatch(setUser(res.data.user))
         toast.success(res.data.message);
         console.log(res.data);
-        navigate("/dashboard")
+        navigate("/")
       }
     } catch (error) {
       console.log(error);
@@ -84,7 +86,7 @@ const Login = () => {
             <div className="flex justify-between gap-12">
               <div>
                 <p className="text-sm ">Did'nt Have an Account</p>
-                <Link to = "/signUp" className='text-sm  cursor-pointer'>LogIn</Link>
+                <Link to = "/signUp" className='text-sm  cursor-pointer'>SignUp</Link>
               </div>
 
               <p onClick={() => navigate("/forget-password")} className="text-sm cursor-pointer">forget password?</p>
@@ -98,7 +100,7 @@ const Login = () => {
             >
               Login
             </Button>
-            <GoogleLoginButton onClick = {() => navigate("/dashboard")}  />
+            <GoogleLoginButton onClick = {() => navigate("/")}  />
           </div>
         </form>
       </div>
