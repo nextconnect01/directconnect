@@ -12,10 +12,12 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { setUser } from "@/redux/authSlice";
+import { setLoading, setUser } from "@/redux/authSlice";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const UpdatePhotoDialouge = ({ openPhoto, setOpenPhoto }) => {
+  const { loading } = useSelector((store) => store.auth);
   const backendUri = import.meta.env.VITE_BACKEND_URL;
 
   const { user } = useSelector((store) => store.auth);
@@ -39,12 +41,17 @@ const UpdatePhotoDialouge = ({ openPhoto, setOpenPhoto }) => {
     }
 
     try {
-      const res = await axios.post(`${backendUri}/api/v1/user/updateFiles`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
+      dispatch(setLoading(true));
+      const res = await axios.post(
+        `${backendUri}/api/v1/user/updateFiles`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
 
       console.log("API Response:", res.data); // Log the response to track success
       if (res.data.success) {
@@ -62,14 +69,17 @@ const UpdatePhotoDialouge = ({ openPhoto, setOpenPhoto }) => {
     } catch (error) {
       console.error("API Error:", error);
       toast.error(error.response?.data?.message || "An error occurred");
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
   return (
     <div>
-      <Dialog open={openPhoto}>
+      <Dialog open={openPhoto} onOpenChange={setOpenPhoto}>
         <DialogContent
           className="sm:max-w-[425px]"
+          onClose={() => setOpenPhoto(false)}
           onInteractOutside={() => setOpenPhoto(false)}
         >
           <DialogHeader>
@@ -95,7 +105,14 @@ const UpdatePhotoDialouge = ({ openPhoto, setOpenPhoto }) => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Save changes</Button>
+              {loading ? (
+                <Button type="submit">
+                  {" "}
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+                </Button>
+              ) : (
+                <Button type="submit">Update</Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>

@@ -1,10 +1,12 @@
 import React from 'react'
 import Navbar from './shared/Navbar'
 import { Button } from './ui/button'
+import SEO from './SEO'
 
 const Contact = () => {
   return (
     <div className='w-full'>
+      <SEO title="Coming Soon Page" description="Welcome to our Coming Soon page "/> 
        <div className="relative h-screen">
         {/* Background Image Section */}
         <div

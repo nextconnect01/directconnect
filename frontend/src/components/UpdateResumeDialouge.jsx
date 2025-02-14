@@ -67,7 +67,7 @@ const UpdateResumeDialouge = ({ openResume, setOpenResume }) => {
 
   return (
     <div>
-      <Dialog open={openResume}>
+      <Dialog open={openResume} onOpenChange={setOpenResume}>
         <DialogContent
           className="sm:max-w-[425px]"
           onInteractOutside={() => setOpenResume(false)}

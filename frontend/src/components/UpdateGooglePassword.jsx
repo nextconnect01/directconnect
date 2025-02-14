@@ -13,7 +13,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import axios from "axios";
 import { toast } from "sonner";
-import { setUser } from "@/redux/authSlice";
+import { setLoading, setUser } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
 
 const UpdateGooglePassword = ({ googlePassword, setGooglePassword }) => {
   const { user } = useSelector((store) => store.auth);
@@ -32,6 +33,7 @@ const UpdateGooglePassword = ({ googlePassword, setGooglePassword }) => {
     formData.append("password", input.password);
 
     try {
+      dispatch(setLoading(true));
       const res = await axios.put("api/v1/user/set-password", formData, {
         headers: {
           "Content-Type": "application/json",
@@ -42,19 +44,21 @@ const UpdateGooglePassword = ({ googlePassword, setGooglePassword }) => {
       if (res.data.success) {
         console.log("everything is ok api success");
 
-        dispatch(setUser(res.data.user) );
+        dispatch(setUser(res.data.user));
         toast.success(res.data.message);
         setGooglePassword(false);
       }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
   return (
     <div>
-      <Dialog open={googlePassword}>
+      <Dialog open={googlePassword} onOpenChange={setGooglePassword}>
         <DialogContent
           className="sm:max-w-[425px]"
           onInteractOutside={() => setGooglePassword(false)}
@@ -80,9 +84,14 @@ const UpdateGooglePassword = ({ googlePassword, setGooglePassword }) => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" type="submit">
-                Save changes
-              </Button>
+              {loading ? (
+                <Button type="submit">
+                  {" "}
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+                </Button>
+              ) : (
+                <Button type="submit">Update</Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>

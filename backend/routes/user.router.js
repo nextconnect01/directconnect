@@ -9,6 +9,7 @@ import {
     updateFileUploads,
     updatePassword,
     updateProfileDetails,
+    verifyEmail,
 } from "../controllers/user.controller.js";
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
 import { multiUpload } from "../middleware/multer.middleware.js";
@@ -20,6 +21,7 @@ router.route("/login").post(login);
 router.route("/logout").get(logout);
 router.route("/forget-password").post(forgetPassword);
 router.route("/recover-password").post(resetPassword)
+router.route("/verify-email").get(verifyEmail)
 
 // Safe Route or Authenticated Route
 router.route("/updateProfile").post(isAuthenticated, multiUpload, updateProfileDetails);

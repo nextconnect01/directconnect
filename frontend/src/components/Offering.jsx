@@ -3,15 +3,17 @@ import Navbar from "./shared/Navbar";
 import { Button } from "./ui/button";
 import Footer from "./shared/Footer";
 import { useNavigate } from "react-router-dom";
+import SEO from "./SEO";
 
 const Offering = () => {
   const navigate = useNavigate();
   return (
     <div className="w-full">
-      <div className="relative h-screen">
+      <SEO title="Offerings Page" description="Welcome to our Offerings page "/> 
+      <div className="relative h-[85vh]">
         {/* Background Image for the top of the page */}
         <div
-          className="absolute top-0 left-0 w-full h-[90%] bg-cover bg-center bg-no-repeat"
+          className="absolute top-0 left-0 w-full h-[80%] bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/images/pexels-fauxels-3184357.jpg')",
           }}
@@ -21,9 +23,9 @@ const Offering = () => {
 
           <div className="relative pt-7 px-5 md:px-10">
             <Navbar />
-            <div className="flex items-center justify-center h-[75vh]">
+            <div className="flex items-center justify-center h-[50vh]">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#FCFCFC] text-center leading-tight">
-                Our Offerings <br />
+                OUR OFFERINGS <br />
               </h1>
             </div>
           </div>
@@ -57,7 +59,7 @@ const Offering = () => {
               {" "}
               <span className="text-blue-500 mr-5">01 </span>No Commission
             </h1>
-            <p>
+            <p className="text-justify">
               We believe your hard-earned money belongs to you. That’s why we’ve
               removed commission fees entirely. With Next Connect, you keep
               everything you earn while connecting directly with clients or
@@ -86,7 +88,7 @@ const Offering = () => {
               <span className="text-blue-500 mr-5">02 </span> Community
               Engagement
             </h1>
-            <p>
+            <p className="text-justify">
               Freelancing doesn’t have to be isolating. Our platform fosters a
               vibrant, supportive community where freelancers and clients can
               share updates, ask questions, and grow together. Stay on track
@@ -116,7 +118,7 @@ const Offering = () => {
               <span className="text-blue-500 mr-5">03 </span>Interactive
               Learning
             </h1>
-            <p>
+            <p className="text-justify">
               Your journey shouldn’t stop at “good enough.” Through mentorship
               programs, workshops, and resources, we’re here to help you level
               up. Whether you’re a seasoned freelancer or just starting out,
@@ -172,7 +174,7 @@ const Offering = () => {
       </div>
 
       <div className="flex flex-col justify-center items-center gap-3 px-9 mt-10">
-        <h1 className="font-bold text-5xl">Why Choose Next Connect</h1>
+        <h1 className="font-bold text-5xl">Why Choose Next Connect ?</h1>
         <p className="text-lg text-justify">
           At Next Connect, we’ve reimagined freelancing to focus on what truly
           matters: trust, collaboration, and giving everyone the tools they need
@@ -190,13 +192,9 @@ const Offering = () => {
               alt=""
             />
             <h1 className="font-bold text-xl">Transparency</h1>
-            <p>
-              Say goodbye to confusing fees and hidden costs—our platform is
-              built on transparency. What you earn is what you keep, with no
-              commission fees eating into your hard work. Whether you’re a
-              freelancer or a client, you’ll always know exactly where your
-              money is going, so you can focus on what really matters—getting
-              the job done.
+            <p className="text-justify">
+            Tired of hidden fees? We show exactly what things cost—no nasty surprises. You keep all your money when freelancing—no percentage cuts or sneaky charges. Clients see every penny they’re spending, and freelancers get paid in full. No confusing math, no fine print. Just simple, honest numbers so you can spend energy on actual work instead of chasing payments or guessing budgets. It’s like getting paid cash-in-hand, but safer and smarter. For clients, it’s like having X-ray vision for your projects—you always know where your cash is going. Work stays fair, pay stays clear, and everyone wins. Join the no-bullsh*t way to freelance.
+
             </p>
           </div>
           <div className="flex flex-col justify-center items-center gap-4 w-full md:w-1/2 px-4">
@@ -206,7 +204,7 @@ const Offering = () => {
               alt=""
             />
             <h1 className="font-bold text-xl">Seamless Collaboration</h1>
-            <p>
+            <p className="text-justify">
               Freelancing often feels like a tug-of-war, but Next Connect
               changes that. Our tools make collaboration seamless, helping
               freelancers and clients align goals, share ideas, and build

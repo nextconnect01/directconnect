@@ -2,10 +2,13 @@ import React from "react";
 import Navbar from "./shared/Navbar";
 import { Button } from "./ui/button";
 import Footer from "./shared/Footer";
+import SEO from "./SEO";
 
 const About = () => {
   return (
     <div>
+      <SEO
+       title="About US Page" description="Welcome to our About US Page "/> 
       {/* Background Image Section */}
       <div
         className="relative w-full h-[70vh] bg-cover bg-center bg-no-repeat"
@@ -18,9 +21,9 @@ const About = () => {
 
         <div className="relative pt-7 px-7">
           <Navbar />
-          <div className="mt-24 flex flex-col items-center">
+          <div className="mt-28 flex flex-col items-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#FCFCFC] text-center leading-tight">
-              Our Story <br />
+              OUR STORY <br />
             </h1>
           </div>
         </div>
@@ -32,7 +35,7 @@ const About = () => {
           Discover The Vision Behind Next Connect
         </h1>
         <div>
-          <div className="py-5 px-5 mt-10 w-full bg-[rgb(247,251,250)] border-s-black">
+          <div className="py-5 px-12 mt-10 w-full bg-[rgb(247,251,250)] border-s-black">
             <div className="flex flex-col md:flex-row justify-center gap-8 md:gap-24 px-4">
               <img
                 className="w-full md:max-w-md lg:max-w-2xl rounded-md cursor-pointer"
@@ -76,8 +79,8 @@ const About = () => {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="flex flex-col gap-3 text-center md:text-left">
-              <h1 className="font-bold text-xl">Integrity</h1>
-              <p className="text-sm sm:text-base">
+              <h1 className="font-bold text-center text-xl">Integrity</h1>
+              <p className="text-sm text-justify sm:text-base">
                 At Next Connect, honesty and transparency are at the heart of
                 every interaction. We ensure every user—freelancer or
                 client—feels secure, valued, and respected. Our no-commission
@@ -87,8 +90,8 @@ const About = () => {
               </p>
             </div>
             <div className="flex flex-col gap-3 text-center md:text-left">
-              <h1 className="font-bold text-xl">Empowerment</h1>
-              <p className="text-sm sm:text-base">
+              <h1 className="font-bold text-center text-xl">Empowerment</h1>
+              <p className="text-sm text-justify sm:text-base">
                 Empowerment drives our mission. We aim to give freelancers the
                 tools and opportunities to grow their careers without
                 restrictions, while clients gain access to a pool of talented
@@ -98,8 +101,8 @@ const About = () => {
               </p>
             </div>
             <div className="flex flex-col gap-3 text-center md:text-left">
-              <h1 className="font-bold text-xl">Innovation</h1>
-              <p className="text-sm sm:text-base">
+              <h1 className="font-bold text-center text-xl">Innovation</h1>
+              <p className="text-sm text-justify sm:text-base">
                 Continuous improvement is essential to staying relevant in the
                 fast-changing freelance world. At Next Connect, we are
                 constantly refining our tools and services to meet your evolving

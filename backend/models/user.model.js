@@ -15,11 +15,10 @@ const userSchema = new Schema(
       },
       unique: true,
     },
-    role : {
-      type : String,
-      enum : ["freelancer","client","admin"],
-      default : "freelancer",
-      
+    role: {
+      type: String,
+      enum: ["freelancer", "client", "admin"],
+      default: "freelancer",
     },
     email: {
       type: String,
@@ -32,8 +31,8 @@ const userSchema = new Schema(
           // Regex for validating email format
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
         },
-        message: props => `${props.value} is not a valid email address!`
-      } 
+        message: (props) => `${props.value} is not a valid email address!`,
+      },
     },
     password: {
       type: String,
@@ -41,6 +40,8 @@ const userSchema = new Schema(
         return !this.googleId; // Required only if googleId is not provided
       },
     },
+    verified: { type: Boolean, default: false },
+    verificationToken: { type: String },
     googleId: {
       type: String,
       unique: true,

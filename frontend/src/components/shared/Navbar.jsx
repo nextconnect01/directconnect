@@ -60,8 +60,8 @@ const Navbar = ({ textColor = "text-white" }) => {
 
         <div className="hidden lg:flex gap-6">
           <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/offering">Offering</Link>
+          <Link to="/about">About Us</Link>
+          <Link to="/offering">Offerings</Link>
           <Link to="/blog">Blog</Link>
           <Link to="/coming-soon">Coming Soon</Link>
         </div>
@@ -122,10 +122,10 @@ const Navbar = ({ textColor = "text-white" }) => {
             Home
           </Link>
           <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>
-            About
+            About Us
           </Link>
           <Link to="/offering" onClick={() => setIsMobileMenuOpen(false)}>
-            Offering
+            Offerings
           </Link>
           <Link to="/blog" onClick={() => setIsMobileMenuOpen(false)}>
             Blog

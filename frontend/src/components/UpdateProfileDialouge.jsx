@@ -79,7 +79,7 @@ const UpdateProfileDialouge = ({ openProfile, setOpenProfile }) => {
 
   return (
     <div>
-      <Dialog open={openProfile}>
+      <Dialog open={openProfile} onOpenChange={setOpenProfile}>
         <DialogContent
           className="sm:max-w-[425px]"
           onInteractOutside={() => setOpenProfile(false)}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { Edit2 } from "lucide-react";
+import { ArrowLeft, Edit2 } from "lucide-react";
 import UpdatePhotoDialouge from "./UpdatePhotoDialouge";
 import { useSelector } from "react-redux";
 import UpdateProfileDialouge from "./UpdateProfileDialouge";
@@ -8,8 +8,12 @@ import UpdateProfileBio from "./UpdateProfileBio";
 import UpdateResumeDialouge from "./UpdateResumeDialouge";
 import UpdateGooglePassword from "./UpdateGooglePassword";
 import UpdateChangePassword from "./UpdateChangePassword";
+import { ArrowBack } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import SEO from "./SEO";
 
 const EditProfile = () => {
+  const navigate = useNavigate();
   const [openResume, setOpenResume] = useState(false);
   const [openPhoto, setOpenPhoto] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
@@ -51,8 +55,12 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-5 p-5 bg-slate-200">
+    <div className="flex flex-col justify-center lg:flex-row gap-5 p-5 bg-slate-200">
+      <SEO title="Edit Profile Page" description="Welcome to our Edit Profile page " />
       <div className="w-full lg:w-2/3 shadow-lg flex flex-col border-2 px-5 py-5 rounded-3xl bg-slate-50">
+        <h1 onClick={() => navigate("/")} className="cursor-pointer">
+          <ArrowLeft />
+        </h1>
         <div className="flex flex-col md:flex-row justify-between items-center p-5 gap-4">
           <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
             <img
@@ -67,7 +75,7 @@ const EditProfile = () => {
             </p>
           </div>
           <Button
-            className="bg-blue-500 text-white"
+            className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
             variant="outline"
             onClick={() => setOpenPhoto(true)}
           >
@@ -79,11 +87,11 @@ const EditProfile = () => {
           setOpenPhoto={setOpenPhoto}
         />
 
-        <div className="mx-3 my-5 px-5 py-5 border-2 rounded-xl flex flex-col gap-4">
+        <div className="mx-3 my-2 px-5 py-5 border-2 rounded-xl flex flex-col gap-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <h1 className="font-bold text-xl">Personal Info</h1>
             <Button
-              className="bg-gray-800 text-white"
+              className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
               onClick={() => setOpenProfile(true)}
               variant="outline"
             >
@@ -114,11 +122,11 @@ const EditProfile = () => {
           />
         </div>
 
-        <div className="mx-3 my-5 px-5 py-5 flex flex-col border-2 rounded-xl">
+        <div className="mx-3 my-2 px-5 py-5 flex flex-col border-2 rounded-xl">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <h1 className="font-bold">Bio</h1>
             <Button
-              className="bg-blue-500 text-white"
+              className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
               onClick={() => setOpenBio(true)}
               variant="outline"
             >
@@ -131,7 +139,7 @@ const EditProfile = () => {
           <UpdateProfileBio openBio={openBio} setOpenBio={setOpenBio} />
         </div>
 
-        <div className="border-2 rounded-xl my-5 py-5 mx-3">
+        <div className="border-2 rounded-xl my-2 py-5 mx-3">
           <div className="flex flex-col md:flex-row justify-between items-center p-5 gap-4">
             <a
               className="underline text-blue-500"
@@ -144,7 +152,7 @@ const EditProfile = () => {
                 : "Resume Not Uploaded"}
             </a>
             <Button
-              className="bg-gray-800 text-white"
+              className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
               variant="outline"
               onClick={() => setOpenResume(true)}
             >
@@ -157,18 +165,18 @@ const EditProfile = () => {
           />
         </div>
 
-        <div className="border-2 rounded-xl mx-3 my-5">
+        <div className="border-2 rounded-xl mx-3 my-2">
           <div className="p-5">
             <h1 className="font-bold text-lg mb-3">Password</h1>
             {user?.isGoogleUser ? (
               !user?.hasPassword ? (
-                <div>
+                <div className="flex items-center justify-between">
                   <p className="text-gray-600">
                     You are logged in with Google. Set a password for additional
                     login options:
                   </p>
                   <Button
-                    className="bg-blue-500 text-white"
+                    className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300 ml-auto"
                     variant="outline"
                     onClick={() => setGooglePassword(true)}
                   >
@@ -180,12 +188,12 @@ const EditProfile = () => {
                   />
                 </div>
               ) : (
-                <div>
+                <div className="flex items-center justify-between">
                   <p className="text-gray-600">
                     You can change your password here:
                   </p>
                   <Button
-                    className="bg-blue-500 text-white"
+                    className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300 ml-auto"
                     variant="outline"
                     onClick={() => setResetPassword(true)}
                   >
@@ -198,12 +206,12 @@ const EditProfile = () => {
                 </div>
               )
             ) : (
-              <div>
+              <div className="flex items-center justify-between">
                 <p className="text-gray-600">
                   You can change your password here:
                 </p>
                 <Button
-                  className="bg-blue-500 text-white"
+                  className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300 ml-auto"
                   variant="outline"
                   onClick={() => setResetPassword(true)}
                 >
@@ -219,70 +227,69 @@ const EditProfile = () => {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/4 h-[70vh] py-10 bg-slate-50 border-2 rounded-3xl shadow-lg p-5 flex flex-col items-center gap-8">
-  <h2 className="font-bold text-lg text-center">Complete your profile</h2>
-  <div className="relative w-28 h-28 md:w-36 md:h-36 overflow-hidden">
-    <svg
-      className="absolute inset-0 transform -rotate-90"
-      viewBox="0 0 36 36"
-    >
-      <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#4ade80" />
-          <stop offset="100%" stopColor="#22c55e" />
-        </linearGradient>
-      </defs>
-      <circle
-        className="text-gray-200"
-        stroke="currentColor"
-        strokeWidth="4"
-        fill="none"
-        cx="18"
-        cy="18"
-        r="15.9155"
-      />
-      <circle
-        stroke="url(#gradient)"
-        strokeWidth="6"
-        strokeDasharray={`${progress}, 100`}
-        strokeDashoffset="0"
-        fill="none"
-        cx="18"
-        cy="18"
-        r="15.9155"
-        className="drop-shadow-md"
-      />
-    </svg>
-    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-      <span className="font-bold text-xl text-gray-800">{progress}%</span>
-      <span className="text-sm text-gray-500">Complete</span>
-    </div>
-  </div>
-  <ul className="text-sm md:text-lg w-full flex flex-col items-center text-center gap-4">
-    <li className="flex items-center justify-center gap-2">
-      {renderIcon(user?.profilePhoto)}
-      <span>Profile Photo</span>
-    </li>
-    <li className="flex items-center justify-center gap-2">
-      {renderIcon(user?.resume)}
-      <span>Resume</span>
-    </li>
-    <li className="flex items-center justify-center gap-2">
-      {renderIcon(user?.bio)}
-      <span>Bio</span>
-    </li>
-    <li className="flex items-center justify-center gap-2">
-      {renderIcon(
-        user?.fullName ||
-          user?.email ||
-          user?.languages?.length > 0 ||
-          user?.professionalTitle
-      )}
-      <span>Personal Info</span>
-    </li>
-  </ul>
-</div>
-
+      <div className="w-full lg:w-1/5 h-[70vh] py-8 bg-slate-50 border-2 rounded-3xl shadow-lg px-8 flex flex-col items-center gap-6">
+        <h2 className="font-bold text-lg text-center">Complete your profile</h2>
+        <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden flex items-center justify-center bg-white">
+          <svg
+            className="absolute inset-0 transform -rotate-90"
+            viewBox="0 0 36 36"
+          >
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#4ade80" />
+                <stop offset="100%" stopColor="#22c55e" />
+              </linearGradient>
+            </defs>
+            <circle
+              className="text-gray-200"
+              stroke="currentColor"
+              strokeWidth="4"
+              fill="none"
+              cx="18"
+              cy="18"
+              r="15.9155"
+            />
+            <circle
+              stroke="url(#gradient)"
+              strokeWidth="6"
+              strokeDasharray={`${(progress / 100) * 100} 100`}
+              strokeDashoffset="0"
+              fill="none"
+              cx="18"
+              cy="18"
+              r="15.9155"
+              className="drop-shadow-md"
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span className="font-bold text-xl text-gray-800">{progress}%</span>
+            <span className="text-sm text-gray-500">Complete</span>
+          </div>
+        </div>
+        <ul className="text-sm md:text-lg w-full flex flex-col items-start gap-4">
+          <li className="flex items-center gap-2">
+            {renderIcon(user?.profilePhoto)}
+            <span>Profile Photo</span>
+          </li>
+          <li className="flex items-center gap-2">
+            {renderIcon(user?.resume)}
+            <span>Resume</span>
+          </li>
+          <li className="flex items-center gap-2">
+            {renderIcon(user?.bio)}
+            <span>Perosnal Bio</span>
+          </li>
+          <li className="flex items-center gap-2">
+            {renderIcon(
+              user?.fullName ||
+                user?.email ||
+                user?.languages?.length > 0 ||
+                user?.professionalTitle
+            )}
+            <span>Personal Info</span>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };

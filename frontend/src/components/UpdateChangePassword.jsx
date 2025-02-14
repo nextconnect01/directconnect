@@ -13,12 +13,13 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import axios from "axios";
 import { toast } from "sonner";
-import { setUser } from "@/redux/authSlice";
+import { setLoading, setUser } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
 
 const UpdateChangePassword = ({ resetPassword, setResetPassword }) => {
   const backendUri = import.meta.env.VITE_BACKEND_URL;
 
-  const { user } = useSelector((store) => store.auth);
+  const { user,loading } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const [input, setInput] = useState({
     password: "",
@@ -34,29 +35,36 @@ const UpdateChangePassword = ({ resetPassword, setResetPassword }) => {
     formData.append("password", input.password);
 
     try {
-      const res = await axios.post(`${backendUri}/api/v1/user/changePassword`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      dispatch(setLoading(true));
+      const res = await axios.post(
+        `${backendUri}/api/v1/user/changePassword`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
 
       if (res.data.success) {
         console.log("everything is ok api success");
 
-        dispatch(setUser(res.data.user) );
+        dispatch(setUser(res.data.user));
         toast.success(res.data.message);
         setResetPassword(false);
       }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
   return (
     <div>
-      <Dialog open={resetPassword}>
+      <Dialog open={resetPassword} onOpenChange={setResetPassword}>
         <DialogContent
           className="sm:max-w-[425px]"
           onInteractOutside={() => setResetPassword(false)}
@@ -82,9 +90,14 @@ const UpdateChangePassword = ({ resetPassword, setResetPassword }) => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" type="submit">
-                Save changes
-              </Button>
+              {loading ? (
+                <Button type="submit">
+                  {" "}
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+                </Button>
+              ) : (
+                <Button type="submit">Update</Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>

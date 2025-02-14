@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { setSearchQuery } from "@/redux/blogSlice";
+import SEO from "./SEO";
 
 const Blog = () => {
   const params = useParams()
@@ -32,17 +33,18 @@ const Blog = () => {
 
   return (
     <div className="bg-slate-200">
+      <SEO title="Blog Page" description="Welcome to our Blog Page "/> 
       <div
-        className="relative w-full h-[50vh] bg-cover bg-center bg-no-repeat"
+        className="relative w-full h-[70vh] bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: "url('images/blog/pexels-imudruk-10430644.jpg')",
         }}
       >
-        <div className="absolute object-cover inset-0 bg-black opacity-40"></div>
+        <div className="absolute object-cover inset-0 bg-black opacity-70"></div>
 
         <div className="relative pt-7 px-7">
           <Navbar />
-          <div className="mt-24 flex flex-col items-center">
+          <div className="mt-28 flex flex-col items-center">
             <h1 className="text-6xl font-bold text-[#FCFCFC] text-center leading-tight">
               Insights and Tips <br />
             </h1>

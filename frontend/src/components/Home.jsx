@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setUser } from "@/redux/authSlice";
 import useGetAllBlog from "@/hooks/useGetAllBlog";
+import SEO from "./SEO";
 
 const Home = () => {
   const backendUri = import.meta.env.VITE_BACKEND_URL;
@@ -40,6 +41,7 @@ const Home = () => {
 
   return (
     <div className="w-full">
+      <SEO title="Home Page" description="Welcome to our home page "/> 
       {/* Hero Section */}
       <div className="relative h-screen">
         <div
@@ -50,7 +52,7 @@ const Home = () => {
 
           <div className="relative pt-7 px-7">
             <Navbar />
-            <div className="mt-24 flex flex-col items-center text-center">
+            <div className="mt-28 flex flex-col items-center text-center">
               <h1 className="text-4xl md:text-6xl font-bold text-[#FCFCFC] leading-tight">
                 Elevate Your Freelance <br />
                 <span className="block">Experience</span>
@@ -96,6 +98,7 @@ const Home = () => {
       <div className="flex flex-wrap justify-around gap-10 mt-10 px-5">
         <div className="max-w-sm flex flex-col gap-3 text-justify">
           <img
+          loading = "lazy"
             className="w-full h-60 object-cover cursor-pointer rounded-md"
             src="/images/homeCard1.webp"
             alt="No Commission"
@@ -109,6 +112,7 @@ const Home = () => {
         </div>
         <div className="max-w-sm flex flex-col gap-3 text-justify">
           <img
+          loading = "lazy"
             className="w-full h-60 object-cover cursor-pointer rounded-md"
             src="/images/homeCard2.webp"
             alt="Community Engagement"
@@ -124,6 +128,7 @@ const Home = () => {
         </div>
         <div className="max-w-sm flex flex-col gap-3 text-justify">
           <img
+          loading = "lazy"
             className="w-full h-60 object-cover cursor-pointer rounded-md"
             src="/images/homeCard3.jpeg"
             alt="Interactive Learning"
@@ -143,6 +148,7 @@ const Home = () => {
       <div className="py-10 mt-24 bg-[rgb(228,243,239)] border-s-black">
         <div className="flex flex-wrap justify-around items-center gap-10 px-5">
           <img
+          loading = "lazy"
             className="w-full max-w-lg rounded-md cursor-pointer"
             src="/images/homeBottom.jpg"
             alt="Vision"
@@ -159,7 +165,7 @@ const Home = () => {
               mission? To create a commission-free space where trust, growth,
               and opportunity grow.
             </p>
-            <a target="blank" href="https://www.reddit.com/r/NEXTCONNECTHUB/">
+            <a rel="preload" target="blank" href="https://www.facebook.com/groups/nextconnecthub">
               <Button className="mt-7 text-lg font-bold px-10 py-4 md:py-6 bg-[#2164f3] hover:bg-white hover:text-black max-w-32 text-[#FCFCFC]">
                 Join Us
               </Button>
@@ -169,7 +175,7 @@ const Home = () => {
       </div>
 
       {/* Testimonials Section */}
-      <div className="relative h-[50vh]">
+      <div className="mt-12 relative h-[50vh]">
         <div
           className="absolute top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('images/homeBackgroundBottom.jpg')" }}
@@ -196,8 +202,7 @@ const Home = () => {
       
       {/*Why Choose Next Connect part*/}
       <div className="flex flex-col gap-5 justify-center items-center mt-10">
-        <h1 className="font-bold text-5xl text-center">Why Choose Next</h1>
-        <h1 className="font-bold text-5xl text-center">Connect For Freelancing ?</h1>
+        <h1 className="font-bold text-5xl text-center">Why Choose Next Connect For Freelancing ?</h1>
         <p className="font-bold text-3xl text-center">A Platform Built for You</p>
         <p className="px-12 text-3xl text-center">We know the challenges freelancers and clients face. That’s why Next Connect is designed to 
         make things easier, fairer, and more effective. Here’s how</p>
@@ -208,6 +213,7 @@ const Home = () => {
   {/* Transparent Transactions Section */}
   <div className="flex flex-wrap justify-center items-center gap-8 md:gap-24 px-5">
     <img
+    loading = "lazy"
       className="w-full max-w-sm rounded-sm object-cover"
       src="/images/homeSecondLast.jpg"
       alt="Transparent Transactions"
@@ -220,7 +226,7 @@ const Home = () => {
         Enjoy seamless payments with no hidden fees or middlemen. You earn what
         you work for, and clients pay what they agreed—simple as that.
       </p>
-      <a href="https://www.reddit.com/r/NEXTCONNECTHUB/" target="blank">
+      <a href="https://www.facebook.com/groups/nextconnecthub" target="blank">
         <Button className="bg-[rgb(33,100,243)] text-sm md:text-lg px-5 md:px-7 py-3 md:py-5 font-bold hover:bg-white hover:text-black">
           Join Us
         </Button>
@@ -240,13 +246,14 @@ const Home = () => {
         Work smarter, not harder. Our tools make it easy to connect,
         communicate, and deliver projects without unnecessary hassle.
       </p>
-      <a href="https://www.reddit.com/r/NEXTCONNECTHUB/" target="blank">
+      <a  href="https://www.facebook.com/groups/nextconnecthub" target="blank">
         <Button className="bg-[rgb(33,100,243)] text-sm md:text-lg px-5 md:px-7 py-3 md:py-5 font-bold hover:bg-white hover:text-black">
           Join Us
         </Button>
       </a>
     </div>
     <img
+    loading = "lazy"
       className="w-full max-w-sm rounded-sm object-cover"
       src="/images/pexels-canvastudio-3277808.jpg"
       alt="Seamless Collaboration"

@@ -64,7 +64,7 @@ const UpdateProfileBio = ({ openBio, setOpenBio }) => {
 
   return (
     <div>
-      <Dialog open={openBio}>
+      <Dialog open={openBio} onOpenChange={setOpenBio}>
         <DialogContent
           className="sm:max-w-[425px]"
           onInteractOutside={() => setOpenBio(false)}

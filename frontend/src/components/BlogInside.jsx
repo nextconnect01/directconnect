@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import Navbar from "./shared/Navbar";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import useGetBlogById from "@/hooks/useGetBlogById";
 import { setSingleBlog } from "@/redux/blogSlice";
+import SEO from "./SEO";
 
 const BlogInside = () => {
   const dispatch = useDispatch()
@@ -15,6 +15,7 @@ const BlogInside = () => {
   
   return (
     <div className="w-full p-5">
+      <SEO title="BlogInside Page" description="Welcome to our BlogInside Page "/> 
       <div className="my-5">
         <Navbar textColor="text-black" />
       </div>

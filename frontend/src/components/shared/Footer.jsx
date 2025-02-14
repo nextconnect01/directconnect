@@ -1,10 +1,12 @@
 import React from "react";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <div>
-      <div className="mt-20 relative h-[50vh]">
+      <div className="mt-20 relative h-[40vh]">
         <div
           className="absolute top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{
@@ -33,7 +35,7 @@ const Footer = () => {
                 connect with clients directly without any commission fees.
               </h3>
               <a
-                href="https://www.reddit.com/r/NEXTCONNECTHUB/"
+                href="https://www.facebook.com/groups/nextconnecthub"
                 target="blank"
               >
                 <Button className="bg-[rgb(33,100,243)] text-sm md:text-lg px-5 md:px-7 py-3 md:py-5 font-bold hover:bg-white hover:text-black">
@@ -42,9 +44,24 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          <p className="text-center text-[#607D8B] mt-5 text-xs md:text-sm">
-            Copyright © 2024 Next-connect-new
-          </p>
+
+          <div className="flex justify-center items-center gap-5 ">
+            <h1 className="text-center text-[#607D8B]  text-xs md:text-sm">
+              Copyright © 2024 Next-connect-hub
+            </h1>
+            <h1
+              className="text-slate-500 underline cursor-pointer"
+              onClick={() => navigate("/privacy-policy")}
+            >
+              Privacy Policy
+            </h1>
+            <h1
+              className="text-slate-500 underline cursor-pointer"
+              onClick={() => navigate("/terms-condition")}
+            >
+              Terms and Condition
+            </h1>
+          </div>
         </div>
       </div>
     </div>

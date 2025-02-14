@@ -4,7 +4,6 @@ const blogSlice = createSlice({
   name: "blog",
   initialState: {
     blogs: [],
-    loading: false,
     searchQuery: "",
     singleBlog: null, // Store for a single blog
   },
@@ -12,9 +11,7 @@ const blogSlice = createSlice({
     setBlogs: (state, action) => {
       state.blogs = action.payload;
     },
-    setLoading: (state, action) => {
-      state.loading = action.payload;
-    },
+   
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
     },
@@ -27,7 +24,7 @@ const blogSlice = createSlice({
   },
 });
 
-export const { setBlogs, setLoading, setSearchQuery, setSingleBlog, resetSingleBlog } =
+export const { setBlogs, setSearchQuery, setSingleBlog, resetSingleBlog } =
   blogSlice.actions;
 
 export default blogSlice.reducer;

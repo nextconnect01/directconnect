@@ -7,18 +7,23 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/redux/authSlice";
+import { setLoading, setUser } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
 
 const Login = () => {
   const backendUri = import.meta.env.VITE_BACKEND_URL;
 
-  const {user} = useSelector(store => store.auth)
+  const {user , loading} = useSelector(store => store.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
+
+  const clearInputs = () => {
+    setInput({ email: "", password: "" });
+  };
 
 
 
@@ -29,6 +34,7 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     console.log(input);
+    dispatch(setLoading(true));
     const formData = new FormData();
 
     formData.append("email", input.email);
@@ -51,17 +57,19 @@ const Login = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false))
     }
   };
 
   return (
     <div className=" flex justify-center items-center w-screen h-screen bg-slate-300">
-      <div className="flex px-12 py-12 flex-col gap-14 max-w-xl border-2 bg-white  ">
+      <div className="flex px-12 py-12 shadow-xl rounded-xl flex-col gap-14 max-w-xl border-2 bg-white  ">
         <form onSubmit={submitHandler}>
-          <h1 className="font-bold text-xl mb-5 text-[#2196F3]">
+          <h1 className="font-bold text-xl mb-5 text-black">
             Account Login
           </h1>
-          <div className="flex flex-col text-[#2196F3] gap-5">
+          <div className="flex flex-col text-black gap-5">
             <div>
               <Label>Email</Label>
               <Input
@@ -84,23 +92,34 @@ const Login = () => {
             </div>
 
             <div className="flex justify-between gap-12">
-              <div>
-                <p className="text-sm ">Did'nt Have an Account</p>
-                <Link to = "/signUp" className='text-sm  cursor-pointer'>SignUp</Link>
+              <div className="flex flex-col">
+                <Link to = "/signUp" className='text-sm  cursor-pointer'>Don't Have An</Link>
+                <Link to = "/signUp" className='text-sm  cursor-pointer'>Account SignUp</Link>
               </div>
 
-              <p onClick={() => navigate("/forget-password")} className="text-sm cursor-pointer">forget password?</p>
+              <p onClick={() => navigate("/forget-password")} className="text-sm cursor-pointer">Forget Password?</p>
             </div>
           </div>
           <div className="flex flex-col gap-5 mt-5">
-            <Button
-              className="bg-[#FCFCFC] text-[#2196F3] hover:bg-[#2164f3] hover:text-white"
-              type="submit"
-              variant="outline"
-            >
-              Login
-            </Button>
-            <GoogleLoginButton onClick = {() => navigate("/")}  />
+          {loading ? (
+              <Button
+                className="bg-white text-black shadow-md hover:bg-blue-500 hover:text-white   text-xl py-5"
+                type="submit"
+                variant="outline"
+              >
+                {" "}
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+              </Button>
+            ) : (
+              <Button
+                className="bg-white text-black shadow-md hover:bg-blue-500 hover:text-white   text-xl py-5"
+                type="submit"
+                variant="outline"
+              >
+                Login
+              </Button>
+            )}
+            <GoogleLoginButton clearInputs={clearInputs}  onClick = {() => navigate("/")}  />
           </div>
         </form>
       </div>

@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import getDataUri from "../db/datauriparser.js";
 import cloudinary from "../db/cloudinary.js";
 import nodemailer from "nodemailer";
+import crypto from "crypto";
+import { google } from "googleapis";
 import validator from "validator";
 import disposableEmailDomains from "disposable-email-domains/index.json" assert { type: "json" };
 
@@ -41,18 +43,18 @@ const blockedDomains = [
 ];
 
 const isTemporaryEmail = (email) => {
-  
-  const domain = email.split('@')[1];
+  const domain = email.split("@")[1];
   console.log("Checking domain: ", domain); // Add logging to debug
-  return blockedDomains.includes(domain) || disposableEmailDomains.includes(domain);
-}
-
+  return (
+    blockedDomains.includes(domain) || disposableEmailDomains.includes(domain)
+  );
+};
 
 export const register = async (req, res) => {
   try {
-    let { username, fullName, email, password ,role } = req.body;
-    if(!role){
-      role = "freelancer"
+    let { username, fullName, email, password, role } = req.body;
+    if (!role) {
+      role = "freelancer";
     }
     if (!username || !fullName || !email || !password) {
       return res.status(400).json({
@@ -80,11 +82,11 @@ export const register = async (req, res) => {
 
     //Check for temp mail from the given list of domains
 
-    if(isTemporaryEmail(email)){
+    if (isTemporaryEmail(email)) {
       return res.status(400).json({
-        message : "Temp Mail Are Not Allowed",
-        success : false
-      })
+        message: "Temp Mail Are Not Allowed",
+        success: false,
+      });
     }
 
     const existingUser = await User.findOne({ email });
@@ -97,13 +99,21 @@ export const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
     const user = await User.create({
       fullName,
       username,
       email,
       password: hashedPassword,
-      role
+      role,
+      verified: false,
+      verificationToken,
     });
+
+    const verificationLink = `${process.env.BACKEND_URL}/api/v1/user/verify-email?token=${verificationToken}`;
+    await sendVerificationEmail(email, verificationLink);
+
     return res.status(201).json({
       message: "Account Created Successfuly",
       user,
@@ -118,17 +128,68 @@ export const register = async (req, res) => {
   }
 };
 
+const sendVerificationEmail = async (email, verificationLink) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_NEXTCONNECTHUB,
+        pass: process.env.PASSWORD_NEXTCONNECTHUB,
+      },
+    });
+    const mailOptions = {
+      from: "nextconnecthub@gmail.com",
+      to: email,
+      subject: "Verify Your Email",
+      html: `<p>Click the link below to verify your email address:</p>
+           <a href="${verificationLink}">Verify Email</a>`,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to send verification email.");
+  }
+};
+
+export const verifyEmail = async (req, res) => {
+  const { token } = req.query;
+
+  try {
+    const user = await User.findOne({ verificationToken: token });
+    
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid or expired token.",
+        success: false,
+      });
+    }
+    
+    user.verified = true;
+    user.verificationToken = undefined;
+    await user.save();
+    
+    return res.redirect(`${process.env.CLIENT_URL}/login`)
+
+    
+  } catch (error) {
+    return res.status(500).json({
+      message: "An Error Occurred",
+      success: false,
+    });
+  }
+};
 export const login = async (req, res) => {
   try {
-    let { email, password ,role} = req.body;
-    if(!role){
-      role = "freelancer"
+    let { email, password, role } = req.body;
+    if (!role) {
+      role = "freelancer";
     }
     if (!email || !password) {
       return res.status(400).json({
         message: "Something is missing while login",
         success: false,
-      }); 
+      });
     }
 
     if (!validator.isEmail(email)) {
@@ -139,6 +200,13 @@ export const login = async (req, res) => {
     if (!existingUser) {
       return res.status(400).json({
         message: "Incorrect Email or Password",
+        success: false,
+      });
+    }
+
+    if (!existingUser.verified) {
+      return res.status(403).json({
+        message: "Please verify your email before logging in.",
         success: false,
       });
     }
@@ -165,7 +233,7 @@ export const login = async (req, res) => {
       _id: existingUser._id,
       fullName: existingUser.fullName,
       email: existingUser.email,
-      role : existingUser.role,
+      role: existingUser.role,
       username: existingUser.username,
       profilePhoto: existingUser.profile?.profilePhoto, // Access profilePhoto from profile
       bio: existingUser.profile?.bio, // Include bio from profile
@@ -188,8 +256,7 @@ export const login = async (req, res) => {
         message: `Welcome Back ${user.fullName}`,
         user,
         success: true,
-        token
-        
+        token,
       });
   } catch (error) {
     console.log(error);
@@ -584,12 +651,10 @@ export const updatePassword = async (req, res) => {
     }
 
     if (existingUser.googleId) {
-      return res
-        .status(400)
-        .json({
-          message: "Cannot update password for Google login users",
-          success: false,
-        });
+      return res.status(400).json({
+        message: "Cannot update password for Google login users",
+        success: false,
+      });
     }
 
     if (!password || password.trim() === "") {
@@ -610,12 +675,10 @@ export const updatePassword = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({
-        message: "An error occurred while updating the password",
-        success: false,
-      });
+    return res.status(500).json({
+      message: "An error occurred while updating the password",
+      success: false,
+    });
   }
 };
 
@@ -641,23 +704,19 @@ export const setPasswordForGoogleUser = async (req, res) => {
 
     // Ensure the user is a Google login user
     if (!existingUser.googleId) {
-      return res
-        .status(400)
-        .json({
-          message: "This endpoint is for Google login users only",
-          success: false,
-        });
+      return res.status(400).json({
+        message: "This endpoint is for Google login users only",
+        success: false,
+      });
     }
 
     // Check if the user already has a password set
     if (existingUser.hasPassword) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Password already set. Use the update password endpoint instead.",
-          success: false,
-        });
+      return res.status(400).json({
+        message:
+          "Password already set. Use the update password endpoint instead.",
+        success: false,
+      });
     }
 
     // Hash and set the new password
