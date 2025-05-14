@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
@@ -16,6 +16,7 @@ const Login = () => {
   const {user , loading} = useSelector(store => store.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -52,7 +53,13 @@ const Login = () => {
         dispatch(setUser(res.data.user))
         toast.success(res.data.message);
         console.log(res.data);
-        navigate("/")
+        if (res.data.user?.role === "freelancer") {
+          navigate("/find-jobs");
+        } else if (res.data.user?.role === "client") {
+          navigate("/client-dashboard");
+        } else {
+          navigate("/");
+        }
       }
     } catch (error) {
       console.log(error);

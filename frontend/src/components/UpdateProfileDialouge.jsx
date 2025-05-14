@@ -14,9 +14,11 @@ import axios from "axios";
 import { setUser } from "@/redux/authSlice";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import { Loader2 } from "lucide-react";
 
 const UpdateProfileDialouge = ({ openProfile, setOpenProfile }) => {
   const backendUri = import.meta.env.VITE_BACKEND_URL;
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
@@ -41,26 +43,30 @@ const UpdateProfileDialouge = ({ openProfile, setOpenProfile }) => {
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-    console.log("Updated Input:", { ...input, [e.target.name]: e.target.value }); // Debugging log
+    console.log("Updated Input:", {
+      ...input,
+      [e.target.name]: e.target.value,
+    }); // Debugging log
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("fullName", input.fullName);
-    formData.append("email", input.email);
-    formData.append("languages", input.languages);
-    formData.append("professionalTitle", input.professionalTitle);
-
-    console.log("FormData before API call:", Object.fromEntries(formData)); // Debugging log
 
     try {
-      const res = await axios.post(`${backendUri}/api/v1/user/updateProfile`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
+      setLoading(true);
+      const body = {
+        fullName: input.fullName,
+        email: input.email,
+        professionalTitle: input.professionalTitle,
+        languages: input.languages,
+      };
+      const res = await axios.post(
+        `${backendUri}/api/v1/user/updateProfile`,
+        body,
+        {
+          withCredentials: true,
+        }
+      );
 
       console.log("API Response:", res.data); // Debugging log
       if (res.data.success) {
@@ -74,6 +80,8 @@ const UpdateProfileDialouge = ({ openProfile, setOpenProfile }) => {
     } catch (error) {
       console.error("API Error:", error);
       toast.error(error.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -144,9 +152,16 @@ const UpdateProfileDialouge = ({ openProfile, setOpenProfile }) => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" type="submit">
-                Save changes
-              </Button>
+              {loading ? (
+                <Button>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+                  ...
+                </Button>
+              ) : (
+                <Button variant="outline" type="submit">
+                  Save changes
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>

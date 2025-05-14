@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { ArrowLeft, Edit2 } from "lucide-react";
+import { ArrowLeft, CircleXIcon, Edit2 } from "lucide-react";
 import UpdatePhotoDialouge from "./UpdatePhotoDialouge";
 import { useSelector } from "react-redux";
 import UpdateProfileDialouge from "./UpdateProfileDialouge";
@@ -11,9 +11,14 @@ import UpdateChangePassword from "./UpdateChangePassword";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import SEO from "./SEO";
+import { Input } from "./ui/input";
+import { Badge } from "./ui/badge";
+import axios from "axios";
+import DialogUpdateSkill from "./DialogUpdateSkill";
 
 const EditProfile = () => {
   const navigate = useNavigate();
+  const [openSkill, setOpenSkills] = useState(false);
   const [openResume, setOpenResume] = useState(false);
   const [openPhoto, setOpenPhoto] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
@@ -56,9 +61,19 @@ const EditProfile = () => {
 
   return (
     <div className="flex flex-col justify-center lg:flex-row gap-5 p-5 bg-slate-200">
-      <SEO title="Edit Profile Page" description="Welcome to our Edit Profile page " />
+      <SEO
+        title="Edit Profile Page"
+        description="Welcome to our Edit Profile page "
+      />
       <div className="w-full lg:w-2/3 shadow-lg flex flex-col border-2 px-5 py-5 rounded-3xl bg-slate-50">
-        <h1 onClick={() => navigate("/")} className="cursor-pointer">
+        <h1
+          onClick={
+            user?.role === "freelancer"
+              ? () => navigate("/find-jobs")
+              : () => navigate("/client-dashboard")
+          }
+          className="cursor-pointer"
+        >
           <ArrowLeft />
         </h1>
         <div className="flex flex-col md:flex-row justify-between items-center p-5 gap-4">
@@ -122,48 +137,80 @@ const EditProfile = () => {
           />
         </div>
 
-        <div className="mx-3 my-2 px-5 py-5 flex flex-col border-2 rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <h1 className="font-bold">Bio</h1>
-            <Button
-              className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
-              onClick={() => setOpenBio(true)}
-              variant="outline"
-            >
-              <Edit2 /> Edit
-            </Button>
+        {user?.role === "freelancer" ? (
+          <div className="mx-3 my-2 px-5 py-5 flex flex-col border-2 rounded-xl">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <h1 className="font-bold">Skills</h1>
+              <Button
+                className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
+                onClick={() => setOpenSkills(true)}
+                variant="outline"
+              >
+                <Edit2 /> Add Skills
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-3 mt-3">
+              {user?.subCategory?.map((skill) => (
+                <Badge key={skill} variant="outline">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+            <DialogUpdateSkill open={openSkill} setOpen={setOpenSkills} />
           </div>
-          <div className="mt-3">
-            <p>{user?.bio || "No bio added yet"}</p>
+        ) : (
+          ""
+        )}
+        {user?.role === "freelancer" ? (
+          <div className="mx-3 my-2 px-5 py-5 flex flex-col border-2 rounded-xl">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <h1 className="font-bold">Bio</h1>
+              <Button
+                className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
+                onClick={() => setOpenBio(true)}
+                variant="outline"
+              >
+                <Edit2 /> Edit
+              </Button>
+            </div>
+            <div className="mt-3">
+              <p>{user?.bio || "No bio added yet"}</p>
+            </div>
+            <UpdateProfileBio openBio={openBio} setOpenBio={setOpenBio} />
           </div>
-          <UpdateProfileBio openBio={openBio} setOpenBio={setOpenBio} />
-        </div>
+        ) : (
+          ""
+        )}
 
-        <div className="border-2 rounded-xl my-2 py-5 mx-3">
-          <div className="flex flex-col md:flex-row justify-between items-center p-5 gap-4">
-            <a
-              className="underline text-blue-500"
-              href={user?.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {user?.resumeOriginalName
-                ? user.resumeOriginalName.split(".").slice(0, -1).join(".")
-                : "Resume Not Uploaded"}
-            </a>
-            <Button
-              className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
-              variant="outline"
-              onClick={() => setOpenResume(true)}
-            >
-              <Edit2 /> Upload Resume
-            </Button>
+        {user?.role === "freelancer" ? (
+          <div className="border-2 rounded-xl my-2 py-5 mx-3">
+            <div className="flex flex-col md:flex-row justify-between items-center p-5 gap-4">
+              <a
+                className="underline text-blue-500"
+                href={user?.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {user?.resumeOriginalName
+                  ? user.resumeOriginalName.split(".").slice(0, -1).join(".")
+                  : "Resume Not Uploaded"}
+              </a>
+              <Button
+                className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
+                variant="outline"
+                onClick={() => setOpenResume(true)}
+              >
+                <Edit2 /> Upload Resume
+              </Button>
+            </div>
+            <UpdateResumeDialouge
+              openResume={openResume}
+              setOpenResume={setOpenResume}
+            />
           </div>
-          <UpdateResumeDialouge
-            openResume={openResume}
-            setOpenResume={setOpenResume}
-          />
-        </div>
+        ) : (
+          ""
+        )}
 
         <div className="border-2 rounded-xl mx-3 my-2">
           <div className="p-5">

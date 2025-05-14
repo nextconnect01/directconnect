@@ -63,8 +63,15 @@ const userSchema = new Schema(
         type: String,
         default: "",
       },
-      languages: [{ type: String, default: [] }],
+      languages: {
+        type: [String],
+        default: [],
+      },
       professionalTitle: { type: String },
+    },
+    mentor: {
+      type: Boolean,
+      default: false,
     },
     skillProfile: {
       category: { type: String },
@@ -72,6 +79,47 @@ const userSchema = new Schema(
       resume: { type: String },
       resumeOriginalName: { type: String },
     },
+    connectedFreelancers: [
+      {
+        freelancer: { type: Schema.Types.ObjectId, ref: "User" },
+        connectedAt: { type: Date, default: Date.now },
+      },
+    ],
+    rejectedJobs: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Job",
+        default: 0,
+      },
+    ],
+    proposalsSent: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Application",
+        default: 0,
+      },
+    ],
+    activeJobs: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Job",
+        default: 0,
+      },
+    ],
+    yourRating: [
+      {
+        client: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+        rating: {
+          type: Number,
+        },
+        feedback: {
+          type: String,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

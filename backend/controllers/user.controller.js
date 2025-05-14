@@ -8,6 +8,10 @@ import crypto from "crypto";
 import { google } from "googleapis";
 import validator from "validator";
 import disposableEmailDomains from "disposable-email-domains/index.json" assert { type: "json" };
+import { Job } from "../models/job.models.js";
+import { Notification } from "../models/notification.models.js";
+import { getRecieverSocketId, io } from "../socket.js";
+import { UpdatedUser } from "../models/updatedUsers.models.js";
 
 const blockedDomains = [
   "chansd.com",
@@ -53,10 +57,8 @@ const isTemporaryEmail = (email) => {
 export const register = async (req, res) => {
   try {
     let { username, fullName, email, password, role } = req.body;
-    if (!role) {
-      role = "freelancer";
-    }
-    if (!username || !fullName || !email || !password) {
+
+    if (!username || !fullName || !email || !password || !role) {
       return res.status(400).json({
         message: "Fill All the Fields during registration",
         success: false,
@@ -157,21 +159,19 @@ export const verifyEmail = async (req, res) => {
 
   try {
     const user = await User.findOne({ verificationToken: token });
-    
+
     if (!user) {
       return res.status(400).json({
         message: "Invalid or expired token.",
         success: false,
       });
     }
-    
+
     user.verified = true;
     user.verificationToken = undefined;
     await user.save();
-    
-    return res.redirect(`${process.env.CLIENT_URL}/login`)
 
-    
+    return res.redirect(`${process.env.CLIENT_URL}/editProfile`);
   } catch (error) {
     return res.status(500).json({
       message: "An Error Occurred",
@@ -234,7 +234,11 @@ export const login = async (req, res) => {
       fullName: existingUser.fullName,
       email: existingUser.email,
       role: existingUser.role,
+     
       username: existingUser.username,
+      activeJob: existingUser.activeJobs,
+     
+      proposalsSent: existingUser.proposalsSent,
       profilePhoto: existingUser.profile?.profilePhoto, // Access profilePhoto from profile
       bio: existingUser.profile?.bio, // Include bio from profile
       languages: existingUser.profile?.languages, // Include languages from profile
@@ -334,143 +338,6 @@ export const getCurrentUser = (req, res) => {
   }
 };
 
-// export const updateUser = async (req, res) => {
-//   try {
-//     const {
-//       email,
-//       fullName,
-//       password,
-//       bio,
-//       languages,
-//       professionalTitle,
-//       category,
-//       subCategory,
-//     } = req.body;
-
-//     let languageArray;
-//     if (languages) {
-//       languageArray = languages.split(",");
-//     }
-
-//     let subCategoryArray;
-//     if (subCategory) {
-//       subCategoryArray = subCategory.split(",");
-//     }
-//     console.log("First step done");
-
-//     const profilePhoto = req.files?.profilePhoto?.[0];
-//     console.log("filePhoto :",profilePhoto);
-
-//     const resume = req.files?.resume?.[0];
-//     console.log("resumePhoto",resume);
-
-//     let profilePictureCloud;
-//     if (profilePhoto) {
-//       try {
-//         const profilePhotoUri = getDataUri(profilePhoto);
-//         profilePictureCloud = await cloudinary.uploader.upload(
-//           profilePhotoUri.content,
-//           {
-//             resource_type: "auto",
-//             public_id: `profile_photo/${Date.now()}`,
-//             access_mode: "public",
-//           }
-//         );
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     }
-//     // console.log("cloudResponsephoto :",profilePictureCloud.secure_url);
-
-//     let resumeCloud;
-//     if (resume) {
-//       try {
-//         const resumeUri = getDataUri(resume);
-//         resumeCloud = await cloudinary.uploader.upload(resumeUri.content, {
-//           resource_type: "auto",
-//           public_id: `resume/${Date.now()}`,
-//           access_mode: "public",
-//         });
-//       } catch (error) {
-//         console.log("error", error);
-//       }
-//     }
-
-//     // console.log("cloudResponseResume :",resumeCloud.secure_url);
-
-//     const userId = req.id;
-
-//     let existingUser = await User.findById(userId);
-//     if (!existingUser) {
-//       return res.status(400).json({
-//         message: "User Not Found",
-//         success: false,
-//       });
-//     }
-
-//     if (profilePictureCloud) {
-//       existingUser.profile.profilePhoto = profilePictureCloud.secure_url;
-//     }
-
-//     if (resumeCloud) {
-//       existingUser.skillProfile.resume = resumeCloud.secure_url;
-//     }
-//     if(email){
-//       existingUser.email = email;
-//     }
-
-//     if (fullName) {
-//       existingUser.fullName = fullName;
-//     }
-
-//     if (password) {
-//       existingUser.password = await bcrypt.hash(password, 10);
-//     }
-
-//     if (bio) {
-//       existingUser.profile.bio = bio;
-//     }
-
-//     if (professionalTitle) {
-//       existingUser.profile.professionalTitle = professionalTitle;
-//     }
-
-//     if (category) {
-//       existingUser.skillProfile.category = category;
-//     }
-
-//     if (languages) {
-//       existingUser.profile.languages = languageArray;
-//     }
-
-//     if (subCategory) {
-//       existingUser.skillProfile.subCategory = subCategoryArray;
-//     }
-
-//     await existingUser.save();
-
-//     const user = {
-//       _id: existingUser._id,
-//       email : existingUser.email,
-//       fullName: existingUser.fullName,
-//       profile: existingUser.profile,
-//       skillProfile: existingUser.skillProfile,
-//     };
-
-//     return res.status(200).json({
-//       message: "User Profile Update Successfully ",
-//       user,
-//       success: true,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({
-//       message: "An error occurred while updating the profile.",
-//       success: false,
-//     });
-//   }
-// };
-
 export const updateProfileDetails = async (req, res) => {
   try {
     const {
@@ -507,9 +374,8 @@ export const updateProfileDetails = async (req, res) => {
     if (professionalTitle)
       existingUser.profile.professionalTitle = professionalTitle;
     if (category) existingUser.skillProfile.category = category;
-    if (languages) existingUser.profile.languages = languages.split(",");
-    if (subCategory)
-      existingUser.skillProfile.subCategory = subCategory.split(",");
+    if (languages) existingUser.profile.languages = languages;
+    if (subCategory) existingUser.skillProfile.subCategory = subCategory;
 
     // Save updated user
     await existingUser.save();
@@ -529,6 +395,7 @@ export const updateProfileDetails = async (req, res) => {
         resume: existingUser.skillProfile?.resume,
         category: existingUser.skillProfile?.category,
         subCategory: existingUser.skillProfile?.subCategory,
+        role: existingUser?.role,
       },
     });
   } catch (error) {
@@ -842,3 +709,157 @@ export const resetPassword = async (req, res) => {
       .json({ message: "Invalid or expired token", success: false });
   }
 };
+
+export const connectedFreelancer = async (req, res) => {
+  const userId = req.id;
+};
+
+export const suggestedFreelancer = async (req, res) => {
+  try {
+    const suggestedUsers = await User.find({
+      _id: { $ne: req.id },
+      role: "freelancer",
+    }).select("-password");
+    if (!suggestedUsers) {
+      return res.status(404).json({
+        message: "No Suggested Users Present at the moment",
+        success: true,
+        users: [],
+      });
+    }
+
+    return res.status(200).json({
+      message: "Suggested Users Found",
+      success: true,
+      users: suggestedUsers,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+};
+
+export const rateFreelancer = async (req, res) => {
+
+  try {
+    const clientId = req.id;
+    const client = await User.findById(clientId);
+    if (!client) {
+      return res.status(404).json({
+        message: "No such client found",
+        success: false,
+      });
+    }
+
+    const jobId = req.params.id;
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        message: "No such job found",
+        success: false,
+      });
+    }
+
+    const freelancerId = job.freelancerAccepted;
+    const { rating, feedback } = req.body;
+
+    if (!rating || !feedback) {
+      return res.status(400).json({
+        message: "You have to fill both rating and feedback",
+        success: false,
+      });
+    }
+
+    // Optional: Prevent duplicate rating from same client
+    const freelancer = await User.findOne({
+      _id: freelancerId,
+      "yourRating.client": clientId,
+      "yourRating.job": jobId,
+    });
+
+    if (freelancer) {
+      return res.status(400).json({
+        message: "You have already rated this freelancer",
+        success: false,
+      });
+    }
+
+    await User.findByIdAndUpdate(freelancerId, {
+      $push: {
+        yourRating: {
+          client: clientId,
+          job: jobId,
+          rating,
+          feedback,
+        },
+      },
+    });
+
+    const notification = await Notification.create({
+      sendersDetail : clientId,
+      recieversDetail : freelancerId,
+      category : "Rating",
+      message : `${client?.fullName} has rated your profile`
+    })
+
+    const recieverSocketId = getRecieverSocketId(freelancerId)
+    if(recieverSocketId){
+      io.to(recieverSocketId).emit('notification',notification)
+      console.log("Client has rated Freelancer",notification);
+      
+    }
+    return res.status(200).json({
+      message: "Feedback Given",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+};
+
+export const createUpdatedUsers = async (req,res) => {
+  try {
+    const userId = req.id
+    const user =  await User.findById(userId)
+    if(!user){
+      return res.status(404).json({
+        message : "No Such User Found",
+        success : false
+      })
+    }
+
+    const {email} = req.body;
+    if(!email){
+      return res.status(400).json({
+        message : "Email Not Filled",
+        success : false
+      })
+    }
+
+    const updatedUser = await UpdatedUser.create({
+      email,
+      fullName : user?.fullName,
+      role : user?.role
+    })
+
+    return res.status(201).json({
+      message : "User To Be Updated Added Successfully",
+      success : true,
+      updatedUser 
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message : "Internal Server Error",
+      success : false
+    })
+    
+  }
+}

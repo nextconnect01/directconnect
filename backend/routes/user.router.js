@@ -1,11 +1,14 @@
 import express from "express";
 import {
+    createUpdatedUsers,
     forgetPassword,
     login,
     logout,
+    rateFreelancer,
     register,
     resetPassword,
     setPasswordForGoogleUser,
+    suggestedFreelancer,
     updateFileUploads,
     updatePassword,
     updateProfileDetails,
@@ -13,6 +16,7 @@ import {
 } from "../controllers/user.controller.js";
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
 import { multiUpload } from "../middleware/multer.middleware.js";
+import { applyAsMentor, getMentorship } from "../controllers/mentorship.controller.js";
 
 const router = express.Router();
 
@@ -24,7 +28,12 @@ router.route("/recover-password").post(resetPassword)
 router.route("/verify-email").get(verifyEmail)
 
 // Safe Route or Authenticated Route
-router.route("/updateProfile").post(isAuthenticated, multiUpload, updateProfileDetails);
+router.route("/userToUpdate").post(isAuthenticated,createUpdatedUsers)
+router.route("/applyAsMentor").post(isAuthenticated,applyAsMentor)
+router.route("/getMentorship").get(isAuthenticated,getMentorship)
+router.route("/giveReview/:id").post(isAuthenticated,rateFreelancer)
+router.route("/updateProfile").post(isAuthenticated, updateProfileDetails);
+router.route("/suggestedFreelancers").get(isAuthenticated,suggestedFreelancer)
 router.route("/updateFiles").post(isAuthenticated, multiUpload, updateFileUploads);
 router.route("/changePassword").post(isAuthenticated, updatePassword);
 
@@ -37,9 +46,9 @@ router.route("/profile").get(isAuthenticated, (req, res) => {
             user: req.user,
         });
     } else {
-        return res.status(401).json({
+        return res.status(200).json({ // Changed from 401 to 200
             success: false,
-            message: "Unauthorized. Please log in.",
+            user: null,
         });
     }
 });

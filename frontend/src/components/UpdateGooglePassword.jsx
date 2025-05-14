@@ -17,7 +17,11 @@ import { setLoading, setUser } from "@/redux/authSlice";
 import { Loader2 } from "lucide-react";
 
 const UpdateGooglePassword = ({ googlePassword, setGooglePassword }) => {
+  const backendUri = import.meta.env.VITE_BACKEND_URL
+
   const { user } = useSelector((store) => store.auth);
+    const { loading } = useSelector((store) => store.auth);
+  
   const dispatch = useDispatch();
   const [input, setInput] = useState({
     password: "",
@@ -34,7 +38,7 @@ const UpdateGooglePassword = ({ googlePassword, setGooglePassword }) => {
 
     try {
       dispatch(setLoading(true));
-      const res = await axios.put("api/v1/user/set-password", formData, {
+      const res = await axios.put(`${backendUri}/api/v1/user/set-password`, formData, {
         headers: {
           "Content-Type": "application/json",
         },

@@ -11,9 +11,6 @@ import SEO from "./SEO";
 
 const Home = () => {
   const backendUri = import.meta.env.VITE_BACKEND_URL;
-
-  useGetAllBlog();
-
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,7 +27,9 @@ const Home = () => {
           dispatch(setUser(null));
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        if (user) {
+          console.error("Error fetching user data:", error);
+        }
         dispatch(setUser(null));
       }
     };
@@ -57,14 +56,14 @@ const Home = () => {
                 Elevate Your Freelance <br />
                 <span className="block">Experience</span>
               </h1>
-              <p className="mt-8 font-bold text-[#FCFCFC] text-sm md:text-base">
+              <div className="mt-8 font-bold text-[#FCFCFC] text-sm md:text-base">
                 Discover a platform where meaningful collaboration takes center
                 stage.
-                <p className="font-bold text-[#FCFCFC] text-sm md:text-base">
+                <div className="font-bold text-[#FCFCFC] text-sm md:text-base">
                   Say goodbye to commissions and hello to opportunities that put
                   your success first
-                </p>
-              </p>
+                </div>
+              </div>
               <Button
                 onClick={() => navigate("/coming-soon")}
                 className="mt-7 py-4 md:py-6 bg-[#2164f3] hover:bg-white hover:text-black max-w-32 text-[#FCFCFC]"

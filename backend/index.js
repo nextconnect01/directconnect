@@ -5,11 +5,17 @@ import dotenv from "dotenv"
 import dbConnect from "./db/db.js";
 import userRouter from "./routes/user.router.js";
 import blogRouter from "./routes/blog.routes.js";
+import jobRouter from "./routes/job.routes.js"
+import geminiRouter from "./routes/gemini.route.js"
+import applicationRouter from "./routes/application.routes.js"
+import messageRouter from "./routes/message.routes.js"
+import notificationRouter from "./routes/notification.routes.js"
 import passport from "passport";
 import session from "express-session";
 import "./auth/google.js"
 import googleAuthRouter from "./routes/auth.routes.js"
-const app = express()
+import { server,app } from "./socket.js";
+
 
 dotenv.config({})
 
@@ -49,10 +55,15 @@ app.use(passport.session())
 
 app.use("/api/v1/user",userRouter)
 app.use("/api/v1/blog",blogRouter)
+app.use("/api/v1/job",jobRouter)
 app.use("/api/v1/auth",googleAuthRouter)
+app.use("/api/v1/ai",geminiRouter)
+app.use("/api/v1/application",applicationRouter)
+app.use("/api/v1/message",messageRouter)
+app.use("/api/v1/notification",notificationRouter)
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, ()=> {
+server.listen(PORT, ()=> {
     dbConnect()
     console.log(`Server is running on port ${PORT}`);
-})
+})  

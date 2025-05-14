@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import store from "@/redux/store";
 import { Loader2 } from "lucide-react";
 import { setLoading, setUser } from "@/redux/authSlice";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const SignUp = () => {
     email: "",
     password: "",
     username: "",
+    role : ""
   });
 
   const changeEventHandler = (e) => {
@@ -36,6 +38,7 @@ const SignUp = () => {
     formData.append("email", input.email);
     formData.append("password", input.password);
     formData.append("username", input.username);
+    formData.append("role" , input.role)
 
     try {
       dispatch(setLoading(true));
@@ -67,7 +70,7 @@ const SignUp = () => {
 
   return (
     <div className=" flex justify-center items-center w-screen h-screen bg-slate-300">
-      <div className="flex px-12 shadow-xl rounded-xl py-12 flex-col gap-14 max-w-2xl border-2 bg-white  ">
+      <div className="flex px-12 shadow-xl rounded-xl py-12 flex-col gap-14 max-w-5xl w-[350px] border-2 bg-white  ">
         <form onSubmit={submitHandler}>
           <h1 className="font-bold text-xl mb-5 text-black">Account SignUp</h1>
           <div className="flex flex-col text-black gap-5">
@@ -111,6 +114,22 @@ const SignUp = () => {
                 onChange={changeEventHandler}
               />
             </div>
+            <div>
+              <Label>Role</Label>
+              <Select 
+               name="role"
+               onValueChange={(value) => setInput({...input,role : value})}
+               value={input.role}
+              >
+                <SelectTrigger className="w-[250px]">
+                  <SelectValue  placeholder="Select Role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="freelancer">Freelancer</SelectItem>
+                  <SelectItem value="client">Client</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="flex justify-between gap-12">
               <div className="flex flex-col">
                 <Link to="/login" className="text-sm  cursor-pointer">
@@ -145,7 +164,7 @@ const SignUp = () => {
                 Sign Up
               </Button>
             )}
-            
+
             <GoogleLoginButton onClick={() => navigate("/")} />
           </div>
         </form>
