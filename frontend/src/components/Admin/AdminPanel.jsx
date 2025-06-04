@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 const AdminPanel = () => {
     useNewAllJobs()
     const {allJobs} = useSelector(store => store.job)
-    const completedJobsCount = allJobs.filter(job => job.status === "completed").length;
+    const completedJobsCount = allJobs?.filter(job => job.status === "completed").length;
     const activeJobs =  allJobs?.length - completedJobsCount
   return (
     <div className='w-full h-full bg-[#FCFCFC]'>
@@ -42,7 +42,7 @@ const AdminPanel = () => {
 Recent Jobs
 </div>
 
-{allJobs.map((jobs) => (<div className='border-2 border-gray-200 p-4 flex justify-between'>
+{allJobs?.map((jobs) => (<div className='border-2 border-gray-200 p-4 flex justify-between'>
 <div className='flex flex-col gap-2'>
     <p className='text-sm font-bold'>{jobs?.title}</p>
     <div className='flex gap-2'>

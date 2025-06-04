@@ -169,7 +169,7 @@ const FindTalent = () => {
                 {/* Rating */}
                 <div className="flex gap-2 mt-2">
                   <RatingStars className="mt-1" rating={3.5} />
-                  <p className="text-slate-600">(38 reviews)</p>
+                  <p className="text-slate-600">(Manually Given For Now)</p>
                 </div>
 
                 {/* Skills Badges */}
@@ -183,12 +183,18 @@ const FindTalent = () => {
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-3">
-                  {Array.from({ length: 3 }).map((_, idx) => (
-                    <div key={idx} className="flex flex-col gap-1 text-center">
-                      <h1 className="text-lg font-bold">97%</h1>
-                      <p className="text-sm">Completion</p>
+                    <div  className="flex flex-col gap-1 text-center">
+                      <h1 className="text-lg font-bold">{freelancer?.activeJobs?.length}</h1>
+                      <p className="text-sm">Completed Jobs</p>
                     </div>
-                  ))}
+                    <div className="flex flex-col gap-1 text-center">
+                      <h1 className="text-lg font-bold">{freelancer?.projectCompleted}</h1>
+                      <p className="text-sm">Active Jobs</p>
+                    </div>
+                    <div  className="flex flex-col gap-1 text-center">
+                      <h1 className="text-lg font-bold">1 </h1>
+                      <p className="text-sm">Years Of Experience</p>
+                    </div>
                 </div>
 
                 {/* Footer */}

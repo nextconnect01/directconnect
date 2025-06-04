@@ -1066,7 +1066,9 @@ export const acceptWork = async (req,res) => {
 
     job.status = "completed";
     await job.save()
-      await User.findByIdAndUpdate(freelancerId,projectCompleted+=1)
+await User.findByIdAndUpdate(freelancerId, {
+  $inc: { projectCompleted: 1 }
+});
 
       const freelancersRank = await Rank.findOne({userDetails : freelancerId})
     if(!freelancersRank){

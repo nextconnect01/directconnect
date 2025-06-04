@@ -63,7 +63,7 @@ const DialogSubmitWork = ({ open, setOpen, job }) => {
         dispatch(updateFreelancersJob(res.data.job));
         toast.success(res.data.message);
         setOpen(false);
-        navigate("/myProject")
+        navigate("/my-project")
       }
     } catch (error) {
       console.log(error);

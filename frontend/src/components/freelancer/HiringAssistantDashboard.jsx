@@ -43,33 +43,38 @@ const HiringAssistantDashboard = () => {
 
 <div className='flex gap-2'>
 <div className='rounded-full h-[27px] w-[27px] flex justify-center items-center bg-blue-800 p-3 text-white'>
-1
+2
 </div>
 <div className='flex flex-col gap-2'>
-<p className='font-bold text-sm'>Client Discovery</p>
-<p className='text-sm'>Clients can discover and appoint you through the Hiring Assistant directory based on your expertise and experience.
+<p className='font-bold text-sm'>Client Appointment
+</p>
+<p className='text-sm'>When a client selects you, you'll receive a notification and their card will appear
+on this dashboard.
 </p>
 </div>
 </div>
 
 <div className='flex gap-2'>
 <div className='rounded-full h-[27px] w-[27px] flex justify-center items-center bg-blue-800 p-3 text-white'>
-1
+3
 </div>
 <div className='flex flex-col gap-2'>
-<p className='font-bold text-sm'>Client Discovery</p>
-<p className='text-sm'>Clients can discover and appoint you through the Hiring Assistant directory based on your expertise and experience.
+<p className='font-bold text-sm'>Job Management Candidates
+</p>
+<p className='text-sm'>Post jobs on behalf of your clients and review applications to shortlist the best
+
 </p>
 </div>
 </div>
 
 <div className='flex gap-2'>
 <div className='rounded-full h-[27px] w-[27px] flex justify-center items-center bg-blue-800 p-3 text-white'>
-1
+4
 </div>
 <div className='flex flex-col gap-2'>
-<p className='font-bold text-sm'>Client Discovery</p>
-<p className='text-sm'>Clients can discover and appoint you through the Hiring Assistant directory based on your expertise and experience.
+<p className='font-bold text-sm'>Earn Commission</p>
+<p className='text-sm'>Receive commission payments when clients successfully hire freelancers based
+on your recommendations.
 </p>
 </div>
 </div>

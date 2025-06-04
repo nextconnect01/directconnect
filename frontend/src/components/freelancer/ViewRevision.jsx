@@ -23,9 +23,9 @@ const ViewRevision = () => {
   const [submitWork,setSubmitWork] = useState(false)
 
   return (
-    <div className="w-full h-full ">
+    <div className="w-full pt-3 h-full ">
       <Navbar />
-      <div className="w-full h-full bg-[#fcfcfc]">
+      <div className="w-full  h-full bg-[#fcfcfc]">
         <div className="w-full h-full ">
           <div className="flex justify-center items-center w-full">
             <div className="flex mt-10 w-full max-w-6xl justify-between">
@@ -142,7 +142,7 @@ const ViewRevision = () => {
                     </Avatar>
                     <div className="flex flex-col gap-1">
                       <p className="font-bold">
-                        Revision Requested By Samarth Khatri{" "}
+                        Revision Requested By {selectedJob?.owner?.fullName}{" "}
                       </p>
                       <p className="text-sm text-slate-500">May 22 ,2025</p>
                     </div>

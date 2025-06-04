@@ -27,7 +27,7 @@ const HireSelectionAssistant = () => {
   const boys = [1, 2, 3, 4];
   const skills = [1, 2, 3, 4];
   const filteredHiringAssistant = hiringAssistants?.filter((hiringAssistant) => {
-    const specialization = hiringAssistant?.yourSpecialization?.toLowercase() || "";
+    const specialization = hiringAssistant?.yourSpecialization?.toLowerCase() || "";
     const rank = hiringAssistant
   })
   return (
