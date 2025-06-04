@@ -12,6 +12,7 @@ import { Job } from "../models/job.models.js";
 import { Notification } from "../models/notification.models.js";
 import { getRecieverSocketId, io } from "../socket.js";
 import { UpdatedUser } from "../models/updatedUsers.models.js";
+import { Rank } from "../models/rank.model.js";
 
 const blockedDomains = [
   "chansd.com",
@@ -111,6 +112,10 @@ export const register = async (req, res) => {
       role,
       verified: false,
       verificationToken,
+    });
+
+    await Rank.create({
+      userDetails: user._id,
     });
 
     const verificationLink = `${process.env.BACKEND_URL}/api/v1/user/verify-email?token=${verificationToken}`;
@@ -234,10 +239,10 @@ export const login = async (req, res) => {
       fullName: existingUser.fullName,
       email: existingUser.email,
       role: existingUser.role,
-     
+
       username: existingUser.username,
       activeJob: existingUser.activeJobs,
-     
+
       proposalsSent: existingUser.proposalsSent,
       profilePhoto: existingUser.profile?.profilePhoto, // Access profilePhoto from profile
       bio: existingUser.profile?.bio, // Include bio from profile
@@ -246,7 +251,9 @@ export const login = async (req, res) => {
       resume: existingUser.skillProfile?.resume, // Access resume from skillProfile
       resumeOriginalName: existingUser.skillProfile?.resumeOriginalName,
       category: existingUser.skillProfile?.category, // Access category from skillProfile
-      subCategory: existingUser.skillProfile?.subCategory, // Access subCategory from skillProfile
+      subCategory: existingUser.skillProfile?.subCategory, // Access subCategory from skillProfile,
+      hiringAssistantStatus: existingUser?.hiringAssistantStatus,
+      projectCompleted : existingUser?.projectCompleted
     };
 
     return res
@@ -348,6 +355,7 @@ export const updateProfileDetails = async (req, res) => {
       professionalTitle,
       category,
       subCategory,
+      uspSkill
     } = req.body;
 
     // Determine user ID from JWT or Google session
@@ -376,6 +384,7 @@ export const updateProfileDetails = async (req, res) => {
     if (category) existingUser.skillProfile.category = category;
     if (languages) existingUser.profile.languages = languages;
     if (subCategory) existingUser.skillProfile.subCategory = subCategory;
+if (uspSkill) existingUser.skillProfile.uspSkill = uspSkill.slice(0, 2);
 
     // Save updated user
     await existingUser.save();
@@ -395,6 +404,7 @@ export const updateProfileDetails = async (req, res) => {
         resume: existingUser.skillProfile?.resume,
         category: existingUser.skillProfile?.category,
         subCategory: existingUser.skillProfile?.subCategory,
+        uspSkill : existingUser?.skillProfile?.uspSkill,
         role: existingUser?.role,
       },
     });
@@ -479,6 +489,7 @@ export const updateFileUploads = async (req, res) => {
       _id: existingUser._id,
       fullName: existingUser.fullName,
       email: existingUser.email,
+      role : existingUser.role,
       username: existingUser.username,
       profilePhoto: existingUser.profile?.profilePhoto,
       bio: existingUser.profile?.bio,
@@ -743,7 +754,6 @@ export const suggestedFreelancer = async (req, res) => {
 };
 
 export const rateFreelancer = async (req, res) => {
-
   try {
     const clientId = req.id;
     const client = await User.findById(clientId);
@@ -799,17 +809,16 @@ export const rateFreelancer = async (req, res) => {
     });
 
     const notification = await Notification.create({
-      sendersDetail : clientId,
-      recieversDetail : freelancerId,
-      category : "Rating",
-      message : `${client?.fullName} has rated your profile`
-    })
+      sendersDetail: clientId,
+      recieversDetail: freelancerId,
+      category: "Rating",
+      message: `${client?.fullName} has rated your profile`,
+    });
 
-    const recieverSocketId = getRecieverSocketId(freelancerId)
-    if(recieverSocketId){
-      io.to(recieverSocketId).emit('notification',notification)
-      console.log("Client has rated Freelancer",notification);
-      
+    const recieverSocketId = getRecieverSocketId(freelancerId);
+    if (recieverSocketId) {
+      io.to(recieverSocketId).emit("notification", notification);
+      console.log("Client has rated Freelancer", notification);
     }
     return res.status(200).json({
       message: "Feedback Given",
@@ -824,41 +833,66 @@ export const rateFreelancer = async (req, res) => {
   }
 };
 
-export const createUpdatedUsers = async (req,res) => {
+export const createUpdatedUsers = async (req, res) => {
   try {
-    const userId = req.id
-    const user =  await User.findById(userId)
-    if(!user){
+    const userId = req.id;
+    const user = await User.findById(userId);
+    if (!user) {
       return res.status(404).json({
-        message : "No Such User Found",
-        success : false
-      })
+        message: "No Such User Found",
+        success: false,
+      });
     }
 
-    const {email} = req.body;
-    if(!email){
+    const { email } = req.body;
+    if (!email) {
       return res.status(400).json({
-        message : "Email Not Filled",
-        success : false
-      })
+        message: "Email Not Filled",
+        success: false,
+      });
     }
 
     const updatedUser = await UpdatedUser.create({
       email,
-      fullName : user?.fullName,
-      role : user?.role
-    })
+      fullName: user?.fullName,
+      role: user?.role,
+    });
 
     return res.status(201).json({
-      message : "User To Be Updated Added Successfully",
+      message: "User To Be Updated Added Successfully",
+      success: true,
+      updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+};
+
+
+export const updateUserRole = async (req,res) => {
+  try {
+    const {userId,role} = req.body;
+    const user = await User.findByIdAndUpdate(userId,{role},{new : true})
+    if(!user){
+      return res.status(404).json({
+        message : "User Not Found",
+        success : false
+      })
+    }
+    return res.status(200).json({
+      message : "User Role Updated",
       success : true,
-      updatedUser 
+      user
     })
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       message : "Internal Server Error",
-      success : false
+      success : true
     })
     
   }

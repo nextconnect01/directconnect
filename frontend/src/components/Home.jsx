@@ -8,6 +8,7 @@ import axios from "axios";
 import { setUser } from "@/redux/authSlice";
 import useGetAllBlog from "@/hooks/useGetAllBlog";
 import SEO from "./SEO";
+import GuestNavbar from "./shared/GuestNavbar";
 
 const Home = () => {
   const backendUri = import.meta.env.VITE_BACKEND_URL;
@@ -50,7 +51,7 @@ const Home = () => {
           <div className="absolute inset-0 bg-black opacity-80"></div>
 
           <div className="relative pt-7 px-7">
-            <Navbar />
+            <GuestNavbar />
             <div className="mt-28 flex flex-col items-center text-center">
               <h1 className="text-4xl md:text-6xl font-bold text-[#FCFCFC] leading-tight">
                 Elevate Your Freelance <br />

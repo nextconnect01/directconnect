@@ -19,6 +19,7 @@ import { Badge } from "../ui/badge";
 import { setUserContacts } from "@/redux/authSlice";
 import useGetAllUnreadNoitifcations from "@/hooks/useGetAllUnreadNoitifcations";
 import ClientFooter from "./ClientFooter";
+import { setAdminJobs } from "@/redux/jobSlice";
 
 const DashboardClient = () => {
   useGetAllUnreadNoitifcations()
@@ -77,10 +78,13 @@ const DashboardClient = () => {
     }).length;
   };
 
+  useEffect(() => {
+    dispatch(setAdminJobs([]))
+  },[])
   return (
     <div className="relative pt-5">
       <Navbar />
-      <div className=" pb-5 flex flex-col lg:flex-row justify-center bg-slate-100 min-h-screen px-4 md:px-6">
+      <div className=" pb-5 flex flex-col lg:flex-row justify-center bg-[#fcfcfc] min-h-screen px-4 md:px-6">
         <div className="w-full lg:w-3/4 px-2 md:px-4 py-4">
           <div className="mt-10 flex flex-col max-w-5xl mx-auto gap-7">
             <h1 className="font-bold text-3xl">Client Dashboard</h1>

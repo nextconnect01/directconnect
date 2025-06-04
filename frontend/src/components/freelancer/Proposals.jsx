@@ -43,7 +43,7 @@ const Proposals = () => {
     <div className="w-full pt-5 min-h-screen">
       <Navbar />
   
-      <div className="w-full pb-5 bg-[#F5F5F5] flex justify-center px-4">
+      <div className="w-full min-h-screen pb-5 bg-[#fcfcfc] flex justify-center px-4">
         <div className="w-full max-w-7xl mt-5 grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6">
           {/* Left Content */}
           <div className="w-full flex flex-col gap-4">
@@ -193,24 +193,24 @@ const Proposals = () => {
   
           {/* Right Sidebar */}
           <div className="w-full lg:w-full flex flex-col gap-7">
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-4">
-              <h1>Your Profile Overview</h1>
-              <div className="flex justify-around text-center">
-                <div>
-                  <h1 className="text-2xl text-blue-600">12</h1>
-                  <p>Proposals Sent</p>
+            <div className="bg-white rounded-lg py-5 px-10 flex flex-col gap-4">
+              <h1 className="font-bold">Your Profile Overview</h1>
+              <div className="flex  justify-between text-center">
+                <div className="bg-gray-200 p-2 rounded-lg ">
+                  <h1 className="text-2xl font-bold text-blue-600">12</h1>
+                  <p className="text-xs">Proposals Sent</p>
                 </div>
-                <div>
-                  <h1 className="text-2xl text-blue-600">3</h1>
-                  <p>Active Projects</p>
+                <div className="bg-gray-200 p-2 rounded-lg">
+                  <h1 className="text-2xl font-bold text-blue-600">3</h1>
+                  <p className="text-xs">Active Projects</p>
                 </div>
               </div>
   
-              <div className="flex justify-between">
+              <div className="flex text-sm  justify-between">
                 <h1>Profile Completion</h1>
                 <p>85%</p>
               </div>
-              <div className="flex justify-between">
+              <div className="flex text-sm justify-between">
                 <h1>Your Rating </h1>
                 <p>6.3</p>
               </div>
@@ -225,7 +225,7 @@ const Proposals = () => {
               </Button>
             </div>
   
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-3">
+            <div className="bg-white rounded-lg p-5 text-sm flex flex-col gap-3">
               <h1>Quick Actions</h1>
               <div className="flex items-center gap-4 cursor-pointer">
                 <User />

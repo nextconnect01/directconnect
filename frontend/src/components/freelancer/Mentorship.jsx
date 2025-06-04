@@ -38,10 +38,10 @@ const Mentorship = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full h-full pt-5">
+    <div className="w-full min-h-screen h-full pt-5">
       <Navbar />
-      <div className="w-full pb-5 h-full bg-[#F5F5F5] px-4">
-        <div className="w-full max-w-7xl mt-5 mx-auto">
+      <div className="w-full min-h-screen pb-5 h-full bg-[#fcfcfc] px-4">
+        <div className="w-full max-w-7xl pt-5 mx-auto">
           <h1 className="font-bold text-xl text-left">Mentorship</h1>
         </div>
 
@@ -110,7 +110,7 @@ const Mentorship = () => {
             </p>
           </div>
           {applied ? (
-            <Button variant="outline" className="bg-green-700 text-white">
+            <Button variant="outline" className="bg-yellow-400  text-white">
               Pending
             </Button>
           ) : (

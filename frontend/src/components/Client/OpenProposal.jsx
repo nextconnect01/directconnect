@@ -80,23 +80,30 @@ const OpenProposal = ({ open, setOpen, app }) => {
 
               <div className="bg-slate-100 rounded-lg p-3">
                 <p className="font-bold">Revisions</p>
-                <p>Unlimited until satisfied</p>
+                <p>One time unlimited revisions</p>
               </div>
             </div>
             <div className="flex flex-col gap-3">
               <p className="font-bold">Portfolio Samples</p>
-              <a
-                className={
-                  app?.applicant?.[0]?.portfolio
-                    ? "text-blue-600 cursor-pointer underline"
-                    : "disabled text-slate-500"
-                }
-                href={app?.applicant?.[0]?.portfolio}
-              >
-                {app?.applicant?.[0]?.portfolio
-                  ? "Link"
-                  : "No Portfolio Submitted By The Freelancer"}{" "}
-              </a>
+             <a
+  className={
+    app?.applicant?.[0]?.portfolio
+      ? "text-blue-600 cursor-pointer underline"
+      : "disabled text-slate-500"
+  }
+  href={
+    app?.applicant?.[0]?.portfolio?.startsWith("http")
+      ? app.applicant[0].portfolio
+      : ``
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {app?.applicant?.[0]?.portfolio
+    ? "Link"
+    : "No Portfolio Submitted By The Freelancer"}
+</a>
+
             </div>
 
             <div className="flex flex-col gap-3">

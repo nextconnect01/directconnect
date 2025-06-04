@@ -15,10 +15,12 @@ import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 import axios from "axios";
 import DialogUpdateSkill from "./DialogUpdateSkill";
+import DialogUpdateUspSkill from "./DialogUpdateUspSkill";
 
 const EditProfile = () => {
   const navigate = useNavigate();
   const [openSkill, setOpenSkills] = useState(false);
+  const [uspSkill,setUspSkill] = useState(false)
   const [openResume, setOpenResume] = useState(false);
   const [openPhoto, setOpenPhoto] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
@@ -161,6 +163,32 @@ const EditProfile = () => {
         ) : (
           ""
         )}
+
+        {user?.role === "freelancer" ? (
+          <div className="mx-3 my-2 px-5 py-5 flex flex-col border-2 rounded-xl">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <h1 className="font-bold">Usp Skill</h1>
+              <Button
+                className="bg-slate-200 border border-gray-400 rounded-lg hover:bg-gray-300"
+                onClick={() => setUspSkill(true)}
+                variant="outline"
+              >
+                <Edit2 /> Add Usp Skills
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-3 mt-3">
+              {user?.uspSkill?.map((skill) => (
+                <Badge key={skill} variant="outline">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+            <DialogUpdateUspSkill open={uspSkill} setOpen={setUspSkill} />
+          </div>
+        ) : (
+          ""
+        )}
+
         {user?.role === "freelancer" ? (
           <div className="mx-3 my-2 px-5 py-5 flex flex-col border-2 rounded-xl">
             <div className="flex flex-col md:flex-row justify-between items-center">

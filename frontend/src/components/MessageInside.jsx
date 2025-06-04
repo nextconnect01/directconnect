@@ -17,10 +17,9 @@ const MessageInside = ({ selectedUser }) => {
   const dispatch = useDispatch();
   const [declineProposal, setDeclineProposal] = useState(false);
   const [acceptProposal, setAcceptProposal] = useState(false);
-  const [updateBrief,setUpdateBrief] = useState(false)
+  const [updateBrief, setUpdateBrief] = useState(false);
   const [messageId, setMessageId] = useState("");
-  const [proposalId,setProposalId] = useState("")
-  
+  const [proposalId, setProposalId] = useState("");
 
   useEffect(() => {
     if (selectedUser) {
@@ -46,118 +45,132 @@ const MessageInside = ({ selectedUser }) => {
         </Button>
       </div>
       <div className="flex flex-col gap-3">
-      {messages &&
-  messages.map((msg) => {
-    const isAnyBriefStatusNotSpecific = msg?.projectBrief?.some(
-      (brief) => brief?.status !== "specific"
-    );
+        {messages &&
+          messages.map((msg) => {
+            const isAnyBriefStatusNotSpecific = msg?.projectBrief?.some(
+              (brief) => brief?.status !== "specific"
+            );
 
-    return (
-      <div
-        className={`flex ${
-          msg?.sendersId === user?._id ? "justify-end" : "justify-start"
-        }`}
-        key={msg._id}
-      >
-        <div
-          className={`p-2 rounded-lg break-words max-w-[70%] ${
-            msg?.sendersId === user?._id
-              ? "bg-blue-500 text-black"
-              : "bg-gray-200 text-black"
-          }`}
-        >
-          {/* Message text */}
-          <p>{msg?.message}</p>
-
-          {/* Project Brief Card */}
-          {msg?.projectBrief?.length > 0 &&
-            msg.projectBrief.map((brief) => (
+            return (
               <div
-                key={brief._id}
-                className="mt-3 p-4 bg-white rounded-xl shadow-md border border-gray-300"
+                className={`flex ${
+                  msg?.sendersId === user?._id ? "justify-end" : "justify-start"
+                }`}
+                key={msg._id}
               >
-                <h3 className="font-semibold text-xl mb-2">{brief.title}</h3>
-                <p className="text-gray-700 mb-2">{brief.description}</p>
+                <div
+                  className={`p-2 rounded-lg break-words max-w-[70%] ${
+                    msg?.sendersId === user?._id
+                      ? "bg-blue-500 text-black"
+                      : "bg-gray-200 text-black"
+                  }`}
+                >
+                  {/* Message text */}
+                  <p>{msg?.message}</p>
 
-                <div className="text-sm text-gray-600 mb-4">
-                  <p>
-                    <span className="font-semibold">Salary:</span> ${brief.salary}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Duration:</span> {brief.duration}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Budget Type:</span> {brief.budgetType}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Deliverables:</span> {brief.delivarables}
-                  </p>
-                </div>
+                  {/* Project Brief Card */}
+                  {msg?.projectBrief?.length > 0 &&
+                    msg.projectBrief.map((brief) => (
+                      <div
+                        key={brief._id}
+                        className="mt-3 p-4 bg-white rounded-xl shadow-md border border-gray-300"
+                      >
+                        <h3 className="font-semibold text-xl mb-2">
+                          {brief.title}
+                        </h3>
+                        <p className="text-gray-700 mb-2">
+                          {brief.description}
+                        </p>
 
-                <div className="flex gap-3">
-                  {msg?.sendersId === user?._id ? (
-                    <>
-                      <Button
-                        onClick={() => {setUpdateBrief(true); setProposalId(brief?._id)}}
-                        variant="outline"
-                        disabled={isAnyBriefStatusNotSpecific}
-                      >
-                        Edit Proposal
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        disabled={isAnyBriefStatusNotSpecific}
-                        onClick={() => {
-                          setDeclineProposal(true);
-                          setMessageId(msg._id);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        className="bg-green-500 hover:bg-green-600 text-white"
-                        disabled={isAnyBriefStatusNotSpecific}
-                        onClick={() => {
-                          setAcceptProposal(true);
-                          setProposalId(brief?._id)
-                        }}
-                      >
-                        Accept Deal
-                      </Button>
-                      <Button
-                        className="bg-red-500 hover:bg-red-600 text-white"
-                        disabled={isAnyBriefStatusNotSpecific}
-                        onClick={() => {
-                          setDeclineProposal(true);
-                          setMessageId(msg._id);
-                        }}
-                      >
-                        Decline
-                      </Button>
-                      <AcceptProposedJob
-                          open={acceptProposal}
-                          setOpen={setAcceptProposal}
-                          messageId={proposalId}
-                        />
-                        <DeclineJobProposal
-                          messageId={messageId}
-                          open={declineProposal}
-                          setOpen={setDeclineProposal}
-                        />
-                        <UpdateProjectBrief selectedJob={proposalId} open={updateBrief} setOpen={setUpdateBrief}/>
-                    </>
-                  )}
+                        <div className="text-sm text-gray-600 mb-4">
+                          <p>
+                            <span className="font-semibold">Salary:</span> $
+                            {brief.salary}
+                          </p>
+                          <p>
+                            <span className="font-semibold">Duration:</span>{" "}
+                            {brief.duration}
+                          </p>
+                          <p>
+                            <span className="font-semibold">Budget Type:</span>{" "}
+                            {brief.budgetType}
+                          </p>
+                          <p>
+                            <span className="font-semibold">Deliverables:</span>{" "}
+                            {brief.delivarables}
+                          </p>
+                        </div>
+
+                        <div className="flex gap-3">
+                          {msg?.sendersId === user?._id ? (
+                            <>
+                              <Button
+                                onClick={() => {
+                                  setUpdateBrief(true);
+                                  setProposalId(brief?._id);
+                                }}
+                                variant="outline"
+                                disabled={isAnyBriefStatusNotSpecific}
+                              >
+                                Edit Proposal
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                disabled={isAnyBriefStatusNotSpecific}
+                                onClick={() => {
+                                  setDeclineProposal(true);
+                                  setMessageId(msg._id);
+                                }}
+                              >
+                                Delete
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                className="bg-green-500 hover:bg-green-600 text-white"
+                                disabled={isAnyBriefStatusNotSpecific}
+                                onClick={() => {
+                                  setAcceptProposal(true);
+                                  setProposalId(brief?._id);
+                                }}
+                              >
+                                Accept Deal
+                              </Button>
+                              <Button
+                                className="bg-red-500 hover:bg-red-600 text-white"
+                                disabled={isAnyBriefStatusNotSpecific}
+                                onClick={() => {
+                                  setDeclineProposal(true);
+                                  setMessageId(msg._id);
+                                }}
+                              >
+                                Decline
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
-            ))}
-        </div>
-      </div>
-    );
-  })}
-
+            );
+          })}
+        <AcceptProposedJob
+          open={acceptProposal}
+          setOpen={setAcceptProposal}
+          messageId={proposalId}
+        />
+        <DeclineJobProposal
+          messageId={messageId}
+          open={declineProposal}
+          setOpen={setDeclineProposal}
+        />
+        <UpdateProjectBrief
+          selectedJob={proposalId}
+          open={updateBrief}
+          setOpen={setUpdateBrief}
+        />
       </div>
     </div>
   );

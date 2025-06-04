@@ -60,7 +60,7 @@ const DialogTakeAction = ({ job, open, setOpen, setShowReviewDialog }) => {
                   className="cursor-pointer"
                 />
                 <span className="text-gray-700">
-                  Re-Submit for Improvements
+                  Accept With Review Changes
                 </span>
               </label>
 
@@ -74,6 +74,20 @@ const DialogTakeAction = ({ job, open, setOpen, setShowReviewDialog }) => {
                   className="cursor-pointer"
                 />
                 <span className="text-gray-700">Accept Work</span>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="radio"
+                  name="action"
+                  value="incomplete"
+                  checked={decision === "incomplete"}
+                  onChange={(e) => setDecision(e.target.value)}
+                  className="cursor-pointer"
+                />
+                <span className="text-gray-700">
+                  Incomplete Work 
+                </span>
               </label>
             </div>
 

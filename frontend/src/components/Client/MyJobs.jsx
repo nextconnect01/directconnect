@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Button } from "../ui/button";
 import {
@@ -22,7 +22,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import useGetAdminJobs from "@/hooks/useGetAdminJobs";
 import DialogTakeAction from "./DialogTakeAction";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setSelectedJob } from "@/redux/jobSlice";
 import { setUserContacts } from "@/redux/authSlice";
 import DialogGiveReview from "./DialogGiveReview";
@@ -30,6 +30,15 @@ import ClientFooter from "./ClientFooter";
 
 const MyJobs = () => {
   useGetAdminJobs();
+  const location = useLocation()
+    const searchParams = new URLSearchParams(location.search);
+const statusFromQuery = searchParams.get("status") || "";
+const [selectedStatus, setSelectedStatus] = useState(statusFromQuery);
+useEffect(() => {
+  setSelectedStatus(statusFromQuery);
+}, [statusFromQuery]);
+
+
   const { userContacts } = useSelector((store) => store.auth);
   const statusFilter = [
     { label: "All Jobs", value: "" },
@@ -48,10 +57,15 @@ const MyJobs = () => {
   const dispatch = useDispatch();
 
   const filteredJobs = adminsJobs?.filter((job) => {
-    const title = job?.title.toLowerCase() || "";
-    const status = job?.status;
-    return title.includes(searchItem?.toLowerCase()) || status === searchItem;
-  });
+  const title = job?.title?.toLowerCase() || "";
+  const status = job?.status?.toLowerCase();
+
+  const matchesTitleOrStatus = title.includes(searchItem?.toLowerCase()) || status === searchItem?.toLowerCase();
+  const matchesStatusFilter = selectedStatus ? status === selectedStatus.toLowerCase() : true;
+
+  return matchesTitleOrStatus && matchesStatusFilter;
+});
+
 
   return (
     <div className="w-full">
@@ -308,7 +322,9 @@ const MyJobs = () => {
                       <div className="flex justify-center gap-10">
                         <Button
                           onClick={() => {
-                            setTakeAction(true);
+                            // setTakeAction(true);
+                            dispatch(setSelectedJob(job))
+                            navigate("/takeAction")
                             setJobId(job?._id);
                           }}
                           variant="outline"
@@ -350,9 +366,33 @@ const MyJobs = () => {
                           Message
                         </Button>
                       </div>
-                    ) : (
-                      ""
-                    )}
+                    ) : job?.status === "review" ? (<div className="flex justify-center gap-10">
+                        <Button
+                          onClick={() => {
+                            navigate("/completedJobs");
+                            dispatch(setSelectedJob(job));
+                          }}
+                          variant="outline"
+                          className="bg-blue-600 text-white"
+                        >
+                          Review Changes
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            const newContacts = Array.isArray(applicant)
+                              ? [...userContacts, ...applicant] // flatten if it's already an array
+                              : [...userContacts, applicant]; // just push as object if it's not
+
+                            dispatch(setUserContacts(newContacts));
+                            navigate("/message");
+                          }}
+                          variant="outline"
+                        >
+                          Message
+                        </Button>
+                      </div>):""
+                      
+                    }
                   </div>
                 );
               })}

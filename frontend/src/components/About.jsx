@@ -3,6 +3,7 @@ import Navbar from "./shared/Navbar";
 import { Button } from "./ui/button";
 import Footer from "./shared/Footer";
 import SEO from "./SEO";
+import GuestNavbar from "./shared/GuestNavbar";
 
 const About = () => {
   return (
@@ -20,7 +21,7 @@ const About = () => {
         <div className="absolute inset-0 bg-black opacity-80"></div>
 
         <div className="relative pt-7 px-7">
-          <Navbar />
+          <GuestNavbar />
           <div className="mt-28 flex flex-col items-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#FCFCFC] text-center leading-tight">
               OUR STORY <br />

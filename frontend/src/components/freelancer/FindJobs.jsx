@@ -31,13 +31,15 @@ import useGetAllAcceptedJobs from "@/hooks/useGetAllAcceptedJobs";
 import { Input } from "../ui/input";
 import { setSelectedJob } from "@/redux/jobSlice";
 import useGetAllUnreadNoitifcations from "@/hooks/useGetAllUnreadNoitifcations";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FreelancersFooter from "./FreelancersFooter";
 
 const FindJobs = () => {
   useGetAllUnreadNoitifcations();
   const { refetchJobs } = useGetAllJobs();
-
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const searchFromQuery = searchParams.get("search") || ""
   const { user } = useSelector((store) => store.auth);
   useGetAllFreelancersApplication();
   const [openPopOver, setOpenPopOver] = useState(false);
@@ -99,6 +101,27 @@ const FindJobs = () => {
     setFilteredJobs(filtered);
   };
 
+  useEffect(() => {
+  if (searchFromQuery) {
+    const searchTerm = searchFromQuery.toLowerCase();
+    const filtered = jobs?.filter((job) => {
+      const jobCategory = job?.category?.toLowerCase() || "";
+      const jobSkills = job?.skills?.map((s) => s.toLowerCase()) || [];
+      const jobTitle = job?.title?.toLowerCase() || ""
+
+      return (
+        jobCategory.includes(searchFromQuery) ||
+        jobSkills.some((skill) => skill.includes(searchFromQuery)) ||
+        jobTitle.includes(searchFromQuery)
+      );
+    });
+    setFilteredJobs(filtered);
+  } else {
+    setFilteredJobs(jobs);
+  }
+}, [searchFromQuery, jobs]);
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -108,19 +131,19 @@ const FindJobs = () => {
   return (
     <div className="w-full  pt-5">
       <Navbar />
-      <div className="w-full pb-5 h-full bg-[#F5F5F5]">
+      <div className="w-full pb-5 h-full bg-[#fcfcfc]">
         <div className="w-full flex justify-center">
-          <div className="w-full mt-8  max-w-6xl ">
+          <div className="w-full mt-5  max-w-6xl ">
             <h1 className="text-3xl font-bold">Find Jobs</h1>
           </div>
         </div>
 
         <div className="w-full flex justify-center">
           <div
-            className="w-full mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 
+            className="w-full mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 
   gap-4 bg-white max-w-6xl rounded-lg shadow-2xl p-4 "
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <p className="text-sm text-slate-500">Category</p>
               <Select
                 value={selectedCategory}
@@ -149,7 +172,7 @@ const FindJobs = () => {
               </Select>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <p className="text-sm text-slate-500">Keywords</p>
               <Input
                 value={selectedKeyword}
@@ -159,7 +182,7 @@ const FindJobs = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <p className="text-sm text-slate-500">Budget Range</p>
               <Select value={selectedBudget} onValueChange={setSelectedBudget}>
                 <SelectTrigger className="w-[180px]">
@@ -176,7 +199,7 @@ const FindJobs = () => {
               </Select>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <p className="text-sm text-slate-500">Project Duration</p>
               <Select
                 value={selectedDuration}
@@ -208,46 +231,46 @@ const FindJobs = () => {
         </div>
 
         <div className="w-full flex justify-center px-2 sm:px-4">
-  <div className="flex flex-col lg:flex-row mt-10 w-full max-w-6xl gap-5">
+  <div className="flex flex-col lg:flex-row  w-full max-w-6xl gap-5">
     {/* LEFT COLUMN */}
-    <div className="w-full lg:w-3/4">
+    <div className="w-full lg:w-4/5">
       {filteredJobs?.map((job) => (
         <div
           key={job?._id}
-          className="bg-white transition-transform duration-300 hover:-translate-y-2 p-4 sm:p-5 mt-4 shadow-2xl w-full rounded-lg border-l-4 hover:border-blue-700 cursor-pointer flex flex-col gap-4"
+          className="bg-white transition-transform duration-300 hover:-translate-y-2 p-4 sm:p-5 mt-4 shadow-2xl w-full rounded-lg border-l-4 hover:border-blue-700 cursor-pointer flex flex-col gap-2"
         >
-          <h1 className="font-bold text-lg sm:text-xl">{job?.title}</h1>
+          <h1 className="font-bold text-md sm:text-xl">{job?.title}</h1>
 
           <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
             <p className="text-slate-500 text-sm">{job?.owner?.fullName}</p>
             <div className="flex gap-1 items-center">
               <IndianRupee className="text-blue-600" />
-              <h1 className="text-blue-600 text-lg sm:text-xl">
+              <div className="text-blue-600 text-lg sm:text-xl">
                 {job?.salary}
-              </h1>
+              </div>
             </div>
           </div>
 
-          <p className="text-slate-600 text-sm sm:text-base">
+          <div className="text-slate-600  text-xs sm:text-base">
             {job?.description}
-          </p>
+          </div>
 
-          <div className="flex flex-wrap gap-3 text-sm text-slate-700">
+          <div className="flex flex-wrap mb-2 gap-3 text-sm text-slate-700">
             <div className="flex gap-1 items-center">
-              <Clock size={"20px"} />
+              <Clock size={"15px"} />
               {job?.applicationDeadline.split("T")[0]}
             </div>
             <div className="flex gap-1 items-center">
-              <Star size={"20px"} />
+              <Star size={"15px"} />
               Rating Required 4+
             </div>
             <div className="flex gap-1 items-center">
-              <Package2 size={"20px"} />
+              <Package2 size={"15px"} />
               {job?.rank}
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex mb-3 flex-wrap gap-3">
             {job?.skills?.map((item, index) => (
               <Badge
                 key={index}
@@ -296,36 +319,36 @@ const FindJobs = () => {
     </div>
 
     {/* RIGHT COLUMN */}
-    <div className="w-full lg:w-1/4 mt-4 flex flex-col gap-10">
+    <div className="w-full lg:w-1/5 mt-4 flex flex-col gap-3">
       <div className="bg-white rounded-lg shadow-2xl p-4">
-        <h1 className="text-lg font-semibold mb-3">Your Profile Overview</h1>
+        <h1 className="text-md font-semibold mb-3">Your Profile Overview</h1>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-slate-100 text-center rounded-lg p-4 flex flex-col gap-2">
-            <h1 className="text-blue-600 text-lg">
+          <div className="bg-gray-200 h-[85px] text-sm text-center rounded-lg p-4 flex flex-col justify-center items-center ">
+            <h1 className="text-blue-600 font-bold text-xl">
               {user?.proposalsSent?.length}
             </h1>
-            <p className="text-slate-700 text-sm">Proposals Sent</p>
+            <p className="text-slate-700 text-xs">Proposals Sent</p>
           </div>
 
-          <div className="bg-slate-100 rounded-lg p-4 text-center flex flex-col gap-2">
-            <h1 className="text-blue-600 text-lg">{user?.activeJob?.length}</h1>
-            <p className="text-slate-700 text-sm">Active Projects</p>
+          <div className="bg-gray-200 rounded-lg h-[85px] p-4 text-center flex flex-col items-center justify-center">
+            <h1 className="text-blue-600 text-xl font-bold">{user?.activeJob?.length}</h1>
+            <p className="text-slate-700 text-xs">Active Projects</p>
           </div>
 
-          <div className="bg-slate-100 p-4 text-center rounded-lg flex flex-col gap-2">
-            <h1 className="text-blue-600 text-lg">85 %</h1>
-            <p className="text-slate-700 text-sm">Profile Completion</p>
+          <div className="bg-gray-200 p-4 text-center h-[85px] rounded-lg flex flex-col items-center justify-center">
+            <h1 className="text-blue-600 text-xl font-bold">85 %</h1>
+            <p className="text-slate-700 text-xs">Profile Completion</p>
           </div>
 
-          <div className="bg-slate-100 p-4 text-center rounded-lg flex flex-col gap-2">
-            <h1 className="text-blue-600 text-lg">6.3</h1>
-            <p className="text-slate-700 text-sm">Your Rating</p>
+          <div className="bg-gray-200 p-4 text-center h-[85px] rounded-lg flex flex-col items-center justify-center">
+            <h1 className="text-blue-600 text-xl font-bold">6.3</h1>
+            <p className="text-slate-700 text-xs">Your Rating</p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-2xl mt-4 p-4 flex flex-col gap-4">
+      <div className="bg-white rounded-lg shadow-2xl text-sm  p-4 flex flex-col gap-4">
         <h1 className="text-lg font-semibold">Recommended Jobs</h1>
 
         {[1, 2, 3].map((_, i) => (
@@ -342,12 +365,12 @@ const FindJobs = () => {
           </div>
         ))}
 
-        <Button variant="outline" className="bg-blue-600 text-white flex items-center gap-2">
-          <Zap /> View All Recommendations
+        <Button variant="outline" className="bg-blue-600 text-xs  text-white flex items-center gap-2">
+          <Zap /> <span>View All Recommendations</span>
         </Button>
       </div>
 
-      <div className="bg-white shadow-2xl p-4 rounded-lg flex flex-col gap-3">
+      <div className="bg-white shadow-2xl text-sm p-4 rounded-lg flex flex-col gap-3">
         <h1 className="text-lg font-semibold">Quick Actions</h1>
 
         <div
@@ -377,11 +400,11 @@ const FindJobs = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow-2xl rounded-lg p-4 flex flex-col gap-5">
+      <div className="bg-white text-sm shadow-2xl rounded-lg p-4 flex flex-col gap-5">
         <h1 className="text-lg font-semibold">Upcoming Community Events</h1>
 
         {[1, 2].map((_, i) => (
-          <div key={i} className="bg-blue-100 p-3 rounded-lg flex flex-col gap-1">
+          <div key={i} className="bg-gray-200 p-3 rounded-lg flex flex-col gap-1">
             <h1 className="text-blue-700 font-medium">
               Freelancing Best Practices Webinar
             </h1>

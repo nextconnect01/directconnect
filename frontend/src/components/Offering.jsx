@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import Footer from "./shared/Footer";
 import { useNavigate } from "react-router-dom";
 import SEO from "./SEO";
+import GuestNavbar from "./shared/GuestNavbar";
 
 const Offering = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Offering = () => {
           <div className="absolute inset-0 bg-black opacity-80"></div>
 
           <div className="relative pt-7 px-5 md:px-10">
-            <Navbar />
+            <GuestNavbar />
             <div className="flex items-center justify-center h-[50vh]">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#FCFCFC] text-center leading-tight">
                 OUR OFFERINGS <br />

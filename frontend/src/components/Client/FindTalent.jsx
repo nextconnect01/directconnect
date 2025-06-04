@@ -16,12 +16,15 @@ import RatingStars from "../shared/RatingStars";
 import { Badge } from "../ui/badge";
 import useGetAllSuggestedTalent from "@/hooks/useGetAllSuggestedTalent";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setSelectedUser, setUserContacts } from "@/redux/authSlice";
 import ClientFooter from "./ClientFooter";
 
 const FindTalent = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const location =  useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const searchFromQuery = searchParams.get("search") || ""
+  const [searchTerm, setSearchTerm] = useState(searchFromQuery || "");
   const { userContacts } = useSelector((store) => store.auth);
   const arr = [1, 2, 3, 4, 5, 6];
   const badge = [1, 2, 3, 4, 5];
@@ -56,7 +59,7 @@ const FindTalent = () => {
       <Navbar />
 
       {/* Main Container */}
-      <div className="pb-5 w-full h-full bg-slate-300 p-4">
+      <div className="pb-5 w-full h-full bg-[#fcfcfc] p-4">
         {/* Hero Section */}
         <div className="flex justify-center">
           <div className="mt-10 bg-[#21b3f3] h-auto text-white flex flex-col lg:flex-row items-center justify-between p-7 rounded-lg max-w-5xl w-full">
@@ -197,6 +200,8 @@ const FindTalent = () => {
                     className="bg-blue-700 text-white hover:bg-blue-800 hover:text-white"
                     onClick={() => {
                       console.log("Selected freelancer:", freelancer);
+                      dispatch(setSelectedUser(freelancer));
+
                       dispatch(setUserContacts([...userContacts, freelancer]));
                       navigate("/message");
                     }}
@@ -209,7 +214,7 @@ const FindTalent = () => {
           </div>
         </div>
       </div>
-      <ClientFooter/>
+      <ClientFooter />
     </div>
   );
 };

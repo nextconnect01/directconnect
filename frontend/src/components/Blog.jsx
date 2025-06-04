@@ -8,6 +8,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { setSearchQuery } from "@/redux/blogSlice";
 import SEO from "./SEO";
+import GuestNavbar from "./shared/GuestNavbar";
 
 const Blog = () => {
   const params = useParams()
@@ -43,7 +44,7 @@ const Blog = () => {
         <div className="absolute object-cover inset-0 bg-black opacity-70"></div>
 
         <div className="relative pt-7 px-7">
-          <Navbar />
+          <GuestNavbar />
           <div className="mt-28 flex flex-col items-center">
             <h1 className="text-6xl font-bold text-[#FCFCFC] text-center leading-tight">
               Insights and Tips <br />

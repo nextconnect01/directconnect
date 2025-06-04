@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import RatingStars from "../shared/RatingStars";
 import { Button } from "../ui/button";
+import ClientFooter from "./ClientFooter";
 
 const CompletedJob = () => {
   const { selectedJob } = useSelector((store) => store.job);
@@ -13,8 +14,8 @@ const CompletedJob = () => {
   return (
     <div className="w-full h-screen">
       <Navbar />
-      <div className="w-full h-full  bg-[#F5F5F5]  ">
-        <div className="flex  justify-center w-full h-screen ">
+      <div className="w-full  h-full  bg-[#fcfcfc]  ">
+        <div className="flex py-10 justify-center w-full h-screen ">
           <div className="w-full h-full bg-white rounded-xl max-w-7xl shadow-xl p-5 flex flex-col gap-4">
             <div className="flex justify-between border-b-2 border-slate-200 pb-5">
               <div className="flex flex-col gap-3">
@@ -172,6 +173,7 @@ const CompletedJob = () => {
           </div>
         </div>
       </div>
+      <ClientFooter/>
     </div>
   );
 };

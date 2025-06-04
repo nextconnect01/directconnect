@@ -9,6 +9,7 @@ const authSlice = createSlice({
     selectedUser : null,
     userContacts : [],
     messagingClients : [],
+    hiringAssistants : []
   },
   reducers: {
     setUser :(state, action) =>{
@@ -37,10 +38,13 @@ const authSlice = createSlice({
     },
     removeMessagingClients : (state,action) => {
       state.messagingClients = state.messagingClients.filter((client) => client._id !== action.payload)
+    },
+    setHiringAssistants : (state,action) => {
+      state.hiringAssistants = action.payload
     }
 
   },
 });
 
-export const { setUser,setLoading,setSuggestedFreelancers,setSelectedUser,setUserContacts,clearUserContacts,removeUserContact,setMessagingClients,removeMessagingClients } = authSlice.actions;
+export const { setUser,setLoading,setSuggestedFreelancers,setSelectedUser,setUserContacts,clearUserContacts,removeUserContact,setMessagingClients,removeMessagingClients,setHiringAssistants } = authSlice.actions;
 export default authSlice.reducer;

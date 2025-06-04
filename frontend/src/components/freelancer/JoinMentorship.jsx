@@ -143,7 +143,7 @@ const JoinMentorship = () => {
   return (
     <div className="w-full h-full">
       <Navbar />
-      <div className="w-full h-full flex justify-center bg-[#F5F5F5]">
+      <div className="w-full h-full flex justify-center bg-[#fcfcfc]">
         <div className="w-full h-full">
           <div className="max-w-8xl pt-10 flex justify-center px-4">
             <h1 className="font-bold text-2xl text-center">Apply To Join As A Mentor</h1>

@@ -43,6 +43,17 @@ import ViewApplicants from "./components/Client/ViewApplicants";
 import CompletedJob from "./components/Client/CompletedJob";
 import Notification from "./components/Notification";
 import JoinMentorship from "./components/freelancer/JoinMentorship";
+import LogoutOnTabClose from "./components/auth/LogoutOnTabClose";
+import FreelancerHome from "./components/freelancer/FreelancerHome";
+import HiringAssistant from "./components/freelancer/HiringAssistant";
+import ApplyHiringForm from "./components/freelancer/ApplyHiringForm";
+import HiringAssistantDashboard from "./components/freelancer/HiringAssistantDashboard";
+import TakeAction from "./components/Client/TakeAction";
+import ReviewChanges from "./components/Client/ReviewChanges";
+import ViewRevision from "./components/freelancer/ViewRevision";
+import GoogleSuccess from "./components/auth/GoogleSuccess";
+import SelectRole from "./components/SelectRole";
+import AdminPanel from "./components/Admin/AdminPanel";
 
 function App() {
   const router = createBrowserRouter([
@@ -60,7 +71,7 @@ function App() {
     { path: "/recover-password/:id", element: <RecoverPassword /> },
     { path: "/privacy-policy", element: <PrivacyPolicy /> },
     { path: "/terms-condition", element: <TermsAndConditions /> },
-    {path : "/client-dashboard" , element : <DashboardClient/>},
+    {path : "/client-dashboard" , element : <ProtectedRoute><DashboardClient/></ProtectedRoute>},
     {path : "/find-talent",element:<FindTalent/>},
     {path : "/myJobs",element : <MyJobs/>},
     {path : "/transaction",element : <Transaction/>},
@@ -70,6 +81,7 @@ function App() {
     {path : "/edit-jobs" ,element : <EditJobs/>},
     {path: "/hire-selectionAssistant", element: <HireSelectionAssistant/>},
     {path : "/screening-tools",element:<ScreeningTools/>},
+    {path : "/freelancersHome",element : <FreelancerHome/>},
     {path : "/find-jobs" ,element :<FindJobs/>},
     {path : "/my-project",element : <MyProjects/>},
     {path : "/proposals",element : <Proposals/>},
@@ -78,48 +90,20 @@ function App() {
     {path : "/message" ,element: <Message/>},
     {path : "/viewApplicants", element : <ViewApplicants/>},
     {path : "/notification",element : <Notification/>},
-    {path : "/joinAsMentor",element : <JoinMentorship/>}
+    {path : "/joinAsMentor",element : <JoinMentorship/>},
+    {path : "/joinHiringAssistant",element : <HiringAssistant/>},
+    {path : "/applyHiringForm",element : <ApplyHiringForm/>},
+    {path : "/hiringAssistantDashboard" ,element : <HiringAssistantDashboard/>},
+    {path : "/takeAction",element : <TakeAction/>},
+    {path : "/reviewChanges",element : <ReviewChanges/>},
+    {path : "/viewRevision",element : <ViewRevision/>},
+    {path : "/google-success",element : <GoogleSuccess/>},
+    {path : "/select-role" ,element : <SelectRole/>},
+    {path : "/adminPanel",element: <AdminPanel/>}
 
   ]);
 
-  // const dispatch = useDispatch()
-  // const {user} = useSelector(store => store.auth)
-  // const {socket} = useSelector(store => store.socketio)
-
-  // useEffect(() => {
-  //   if(user && !socket){
-  //     const socketio = io('http://localhost:8000',{
-  //       query : {
-  //         userId : user?._id
-  //       },
-  //       transports : ['websocket']
-  //     })
-  //     dispatch(setSocket(socketio))
-
-  //     socketio.on('getOnlineUsers',(onlineUsers) => {
-  //       dispatch(setOnlineUsers(onlineUsers))
-  //     })
-
-  //     socketio.on('notification',(notification) => {
-  //       console.log("Recieved Notification",notification);
-  //       if(notification.type === "message"){
-  //         dispatch(setMessageNotifications(notification))
-  //         dispatch(increamentUnreadMessage(notification.userId))
-  //       }
-        
-  //     })
-
-  //     return () => {
-  //       socketio.close()
-  //       dispatch(setSocket(null))
-  //     }
-
-  //   } else if(socket){
-  //     socket.close()
-  //     dispatch(setSocket(null))
-  //   }
-
-  // } ,[user,dispatch])
+  
   const { user } = useSelector((store) => store.auth);
 
   return (
@@ -127,7 +111,7 @@ function App() {
       <Toaster richColors />
       <RouterProvider key={user ? "loggedIn" : "loggedOut"} router={router} />
       {user && <SocketProvider />}  {/* Only load when user is logged in */}
-
+      {user && <LogoutOnTabClose/>}
     </HelmetProvider>
   );
 }

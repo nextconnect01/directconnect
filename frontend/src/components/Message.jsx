@@ -21,6 +21,8 @@ import useGetAllClients from "@/hooks/useGetAllClients";
 import DialogProjectBrief from "./DialogProjectBrief";
 import FreelancersFooter from "./freelancer/FreelancersFooter";
 import ClientFooter from "./Client/ClientFooter";
+import DialogClientsChat from "./DialogClientsChat";
+import DialogFreelancerChat from "./DialogFreelancerChat";
 
 const Message = () => {
   const backendUri = import.meta.env.VITE_BACKEND_URL
@@ -29,6 +31,10 @@ const Message = () => {
   const [addToChat, setAddToChat] = useState(false);
   const [textMessage, setTextMessage] = useState("");
   const { unreadMessage } = useSelector((store) => store.chat);
+  const [freelancersChat,setFreelancersChat] =useState(false)
+  const [clientsChat, setClientsChat] = useState(false)
+  const [otherUserId,setOtherUserId] = useState("")
+
   const { user, userContacts, selectedUser } = useSelector(
     (store) => store.auth
   );
@@ -37,10 +43,21 @@ const Message = () => {
   const dispatch = useDispatch();
   const [projectBrief, setProjectBrief] = useState(false);
   const [searchItem, setSearchItem] = useState("");
-  const filteredUserContacts = userContacts?.filter((contacts) => {
+  const seenIds = new Set();
+const filteredUserContacts = userContacts
+  ?.filter((contacts) => {
     const fullName = contacts?.fullName?.toLowerCase() || "";
     return fullName.includes(searchItem?.toLowerCase());
+  })
+  .filter((contact) => {
+    if (seenIds.has(contact._id)) {
+      return false;
+    }
+    seenIds.add(contact._id);
+    return true;
   });
+
+  
 
   const sendMessageHandler = async (e) => {
     try {
@@ -71,11 +88,11 @@ const Message = () => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(setSelectedUser(null));
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(setSelectedUser(null));
+  //   };
+  // }, []);
 
   return (
     <div className="h-full w-full pt-5">
@@ -136,7 +153,7 @@ const Message = () => {
                       </p>
                     </div>
                     <Trash2
-                      onClick={() => dispatch(removeUserContact(user?._id))}
+                      onClick={() => { setClientsChat(true); setOtherUserId(user?._id)}}
                     />
                     {unreadMessage[user._id] > 0 && (
                       <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full">
@@ -146,6 +163,8 @@ const Message = () => {
                   </div>
                 );
               })}
+                          <DialogClientsChat open={clientsChat} setOpen={setClientsChat} otherUserId={otherUserId} />
+
             </div>
           ) : (
             <div>
@@ -178,8 +197,9 @@ const Message = () => {
                     </div>
                     <Trash2
                       onClick={() =>
-                        dispatch(removeMessagingClients(client?._id))
-                      }
+                        {
+                          setFreelancersChat(true); setOtherUserId(client?._id)
+                      }}
                     />
                     {unreadMessage[client._id] > 0 && (
                       <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full">
@@ -189,10 +209,11 @@ const Message = () => {
                   </div>
                 );
               })}
+
             </div>
           )}
         </div>
-
+          <DialogFreelancerChat open={freelancersChat} setOpen={setFreelancersChat} otherUserId={otherUserId}/>
         <div className="flex-1 bg-white shadow-2x rounded-lg flex flex-col h-screen ">
           {selectedUser ? (
             <div className="flex flex-col h-full">

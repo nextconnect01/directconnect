@@ -17,10 +17,19 @@ import { Check } from "lucide-react";
 import RatingStars from "../shared/RatingStars";
 import { Badge } from "../ui/badge";
 import ClientFooter from "./ClientFooter";
+import useGetAllHiringAssistant from "@/hooks/useGetAllHiringAssistant";
+import { useSelector } from "react-redux";
 
 const HireSelectionAssistant = () => {
+  useGetAllHiringAssistant()
+  const {hiringAssistants} = useSelector(store => store.auth)
+
   const boys = [1, 2, 3, 4];
   const skills = [1, 2, 3, 4];
+  const filteredHiringAssistant = hiringAssistants?.filter((hiringAssistant) => {
+    const specialization = hiringAssistant?.yourSpecialization?.toLowercase() || "";
+    const rank = hiringAssistant
+  })
   return (
     <div className="w-full pt-5 ">
       <Navbar />
@@ -83,11 +92,22 @@ const HireSelectionAssistant = () => {
               <Label htmlFor="specialization" className="mb-2 font-bold">
                 Specialization
               </Label>
-              <Input
-                id="specialization"
-                type="text"
-                placeholder="Enter Specialization ..."
-              />
+              <Select>
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Select Category" />
+  </SelectTrigger>
+  <SelectContent>
+        <SelectItem value="any">Any</SelectItem>
+
+    <SelectItem value="webDevelopment">Web Development</SelectItem>
+    <SelectItem value="mobileDevelopment">Mobile Development</SelectItem>
+    <SelectItem value="uiux">UI/UX Design</SelectItem>
+        <SelectItem value="digitalMarketing">Digital Marketing</SelectItem>
+    <SelectItem value="contentWriting">Content Writing</SelectItem>
+
+  </SelectContent>
+</Select>
+
             </div>
 
             <div className="flex flex-col gap-1">
@@ -97,13 +117,14 @@ const HireSelectionAssistant = () => {
               <Input
                 id="range"
                 type="text"
-                placeholder="Enter Your Budget ..."
+                placeholder="Enter Your Budget in rupees ..."
               />
+              <p className="text-xs text-slate-500">(10% upto 500 rupees will be the Hiring Assistant's Fees)</p>
             </div>
 
             <div className="flex flex-col gap-1">
               <Label htmlFor="range" className="mb-2 font-bold">
-                Budget Range
+                Required Freelancers Rating
               </Label>
               <Select>
                 <SelectTrigger className="w-[180px]">
@@ -111,17 +132,13 @@ const HireSelectionAssistant = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Not Selected</SelectLabel>
-                    <SelectItem value="1">1</SelectItem>
-                    <SelectItem value="2">2</SelectItem>
-                    <SelectItem value="3">3</SelectItem>
-                    <SelectItem value="4">4</SelectItem>
-                    <SelectItem value="5">5</SelectItem>
-                    <SelectItem value="6">6</SelectItem>
-                    <SelectItem value="7">7</SelectItem>
-                    <SelectItem value="8">8</SelectItem>
-                    <SelectItem value="9">9</SelectItem>
-                    <SelectItem value="10">10</SelectItem>
+                                        <SelectItem value="any">Any Rating</SelectItem>
+
+                    <SelectItem value="sevenPlus">7+ Stars (Assistant : 3.0 - 6.9)</SelectItem>
+                    <SelectItem value="sixPlus">6+ Stars (Assistant : 3.0 - 5.9)</SelectItem>
+                    <SelectItem value="fivePlus">5+ Stars (Assistant : 3.0 - 4.9)</SelectItem>
+                    <SelectItem value="fourPlus">4+ Stars (Assistant : 3.0 - 3.9)</SelectItem>
+                    
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -136,57 +153,56 @@ const HireSelectionAssistant = () => {
               Apply Filter
             </Button>
           </div>
-        </div>
+        </div> 
       </div>
-      {boys.map((item, index) => (
-        <div key={index} className="w-full pb-5 mb-10 mt-10 flex justify-center ">
+      {hiringAssistants?.map((hiringAssistant) => (
+        <div key={hiringAssistant?._id} className="w-full pb-5 mb-10 mt-10 flex justify-center ">
           <div className="w-full max-w-6xl shadow-2xl rounded-xl bg-white p-5 flex justify-between ">
             <div className="flex gap-3">
               <Avatar>
-                <AvatarImage src="" alt="image" />
+                <AvatarImage src={hiringAssistant?.userDetails?.profile?.profilePhoto} alt="image" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-2">
                 <div className="flex gap-2">
                 <h1>
-                  Samarth Khatri 
+                 {hiringAssistant?.userDetails?.fullName}
                 </h1>
                 <Check className="text-blue-700"  />
                 </div>
                
                 <p className="text-sm text-slate-500">
-                  Senior Web Development Specialist
+                  {hiringAssistant?.yourSpecialization}
                 </p>
                 <div className="flex gap-2">
                   <RatingStars rating={5} />
                   <p>(48 reviews )</p>
                 </div>
                 <div className="flex gap-2">
-                {skills.map((item, index) => (
+                {hiringAssistant?.skills.map((skill) => (
                   <div className="flex gap-2">
                     <Badge className="bg-slate-200" variant="outline">
-                      React Js
+                      {skill}
                     </Badge>
                   </div>
                 ))}
                 </div>
                 
-                <div className="grid grid-cols-3 gap-9">
-                  <div className="flex flex-col">
-                    <h1 className="font-bold text-center">$75</h1>
-                    <p className="text-sm text-slate-500 mt-2">Hourly Rate</p>
-                  </div>
-                  <div className="flex flex-col">
-                    <h1 className="font-bold text-center">80%</h1>
-                    <p className="text-sm text-slate-500 mt-2">Job Success
-                    </p>
-                  </div>
-                  <div className="flex flex-col">
-                    <h1 className="font-bold text-center">5</h1>
-                    <p className="text-sm text-slate-500 mt-2">Years Exp.
-                    </p>
-                  </div>
-                </div>
+               <div className="grid grid-cols-3 gap-5">
+  <div className="flex flex-col items-center">
+    <h1 className="font-bold">$75</h1>
+    <p className="text-sm text-slate-500 mt-2">Hiring Assistant's Rank</p>
+  </div>
+  <div className="flex flex-col items-center">
+    <h1 className="font-bold">80%</h1>
+    <p className="text-sm text-slate-500 mt-2">Job Success</p>
+  </div>
+  <div className="flex flex-col items-center">
+    <h1 className="font-bold">5</h1>
+    <p className="text-sm text-slate-500 mt-2">Years Exp.</p>
+  </div>
+</div>
+
               </div>
             </div>
             <div className="flex flex-col gap-3 justify-center items-center">

@@ -54,10 +54,14 @@ const Login = () => {
         toast.success(res.data.message);
         console.log(res.data);
         if (res.data.user?.role === "freelancer") {
-          navigate("/find-jobs");
+          navigate("/freelancersHome");
         } else if (res.data.user?.role === "client") {
           navigate("/client-dashboard");
-        } else {
+        } 
+        else if(res.data.user.role === "admin"){
+          navigate("/adminPanel")
+        }
+        else {
           navigate("/");
         }
       }
@@ -126,7 +130,7 @@ const Login = () => {
                 Login
               </Button>
             )}
-            <GoogleLoginButton clearInputs={clearInputs}  onClick = {() => navigate("/")}  />
+            <GoogleLoginButton clearInputs={clearInputs}  onClick = {() => navigate("/find-jobs")}  />
           </div>
         </form>
       </div>

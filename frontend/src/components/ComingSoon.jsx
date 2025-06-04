@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from './shared/Navbar'
 import { Button } from './ui/button'
 import SEO from './SEO'
+import GuestNavbar from './shared/GuestNavbar'
 
 const Contact = () => {
   return (
@@ -19,7 +20,7 @@ const Contact = () => {
           <div className="absolute inset-0 bg-black opacity-80"></div>
 
           <div className="relative pt-7 px-7">
-            <Navbar />
+            <GuestNavbar />
             <div className="flex justify-center items-center text-center h-screen">
               <h1 className='text-white font-bold text-4xl'>Coming Soon</h1>
             </div>

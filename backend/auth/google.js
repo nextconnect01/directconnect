@@ -18,6 +18,7 @@ passport.use(
           user = await User.create({
             fullName: profile.displayName,
             email: profile.emails[0].value,
+            role : null,
             username: profile.emails[0].value.split("@")[0],
             googleId: profile.id,
             isGoogleUser: true, // Explicitly set this field
@@ -58,6 +59,7 @@ passport.deserializeUser(async (id, done) => {
       _id: user._id,
       fullName: user.fullName,
       email: user.email,
+      role : user.role,
       username: user.username,
       profilePhoto: user.profile?.profilePhoto,
       bio: user.profile?.bio,
@@ -67,9 +69,12 @@ passport.deserializeUser(async (id, done) => {
       resumeOriginalName: user.skillProfile?.resumeOriginalName,
       category: user.skillProfile?.category,
       subCategory: user.skillProfile?.subCategory,
+      projectCompleted : user?.projectCompleted,
       isGoogleUser: user.isGoogleUser, // Ensure this is included in the Redux store
       hasPassword: user.hasPassword,   // Ensure this is included in the Redux store
     };
+        console.log("🧠 Deserialized User:", completeUser); // Add this
+
 
     done(null, completeUser); // Pass the complete user object to req.user
   } catch (error) {

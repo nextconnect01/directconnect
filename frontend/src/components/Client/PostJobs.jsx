@@ -3,6 +3,7 @@ import Navbar from "../shared/Navbar";
 import {
   Bot,
   Calendar,
+  CircleAlert,
   CircleX,
   CircleXIcon,
   DollarSign,
@@ -33,6 +34,8 @@ import Footer from "../shared/Footer";
 import { duration } from "@mui/material";
 import axios from "axios";
 import { toast } from "sonner";
+import ClientFooter from "./ClientFooter";
+import DialogRevisionWarning from "./DialogRevisionWarning";
 
 const PostJobs = () => {
   const backendUri = import.meta.env.VITE_BACKEND_URL
@@ -87,6 +90,9 @@ const PostJobs = () => {
     }
   };
 
+
+  const [revisionWarning,setRevisionWarning] = useState(false)
+
   const submitHandler = async () => {
     console.log(input);
 
@@ -115,6 +121,16 @@ const PostJobs = () => {
         <div className="bg-white mb-20 shadow-2xl max-w-5xl flex flex-col gap-4 rounded-lg p-4 mt-10 ">
           <h1 className="text-2xl font-bold ">Post A New Job </h1>
 
+          <div className="w-full bg-orange-100 border-l-4 border-yellow-500 px-7 py-5 flex flex-col gap-2 ">
+<div className="flex gap-3 text-yellow-700">
+<CircleAlert />
+<p className="font-bold">Important Notice : Revision Policy</p>
+
+</div>
+<p className="text-yellow-700">
+Please be advised that you will only have 5 days after work submission to request any revisions. After this 5-day period, the work will be automatically considered complete and payment will be released to the freelancer. Please note that no compensation or refunds will be available after this period (0% of your payment will be returnable).
+</p>
+          </div>
           <div className="w-full bg-blue-100 border-l-4 border-blue-600  px-7 py-5 flex flex-col gap-2">
             <div className="flex text-blue-500 gap-3">
               <Lightbulb />
@@ -288,8 +304,8 @@ const PostJobs = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem value="oneTime">One Time Project</SelectItem>
-                    <SelectItem value="ongoing">Ongoing Project</SelectItem>
-                    <SelectItem value="contract">Contract</SelectItem>
+                    <SelectItem disabled value="ongoing">Ongoing Project</SelectItem>
+                    <SelectItem disabled value="contract">Contract</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -341,7 +357,7 @@ const PostJobs = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem value="fixed">Fixed Price</SelectItem>
-                    <SelectItem value="hourly">Hourly Rate</SelectItem>
+                    <SelectItem disabled value="hourly">Hourly Rate</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -391,32 +407,42 @@ const PostJobs = () => {
           </div>
 
           <div className="flex gap-2">
-            <input type="checkbox" id="myCheckbox" />
-            <label htmlFor="myCheckbox">
+            <input type="checkbox" id="myCheckbox1" />
+            <label htmlFor="myCheckbox1">
               I would like hiring assistance from a mid-level freelancer
             </label>
           </div>
 
-          <div className="flex gap-2">
-            <input type="checkbox" id="myCheckbox" />
-            <label htmlFor="myCheckbox">
-              I agree to Next Connect's{" "}
-              <span
-                onClick={() => navigate("/terms-condition")}
-                className="text-blue-600 cursor-pointer"
-              >
-                Terms of Service
-              </span>{" "}
-              and{" "}
-              <span
-                onClick={() => navigate("/privacy-policy")}
-                className="text-blue-600 cursor-pointer"
-              >
-                Privacy Policy
-              </span>{" "}
-              Privacy Policy
-            </label>
-          </div>
+         <div className="flex gap-2">
+  <input
+    onClick={() => setRevisionWarning(!revisionWarning)}
+    type="checkbox"
+    id="myCheckbox"
+  />
+  <label htmlFor="myCheckbox">
+    I agree to Next Connect's{" "}
+    <span
+      onClick={(e) => {
+        e.stopPropagation();
+        navigate("/terms-condition");
+      }}
+      className="text-blue-600 cursor-pointer"
+    >
+      Terms of Service
+    </span>{" "}
+    and{" "}
+    <span
+      onClick={(e) => {
+        e.stopPropagation();
+        navigate("/privacy-policy");
+      }}
+      className="text-blue-600 cursor-pointer"
+    >
+      Privacy Policy
+    </span>
+  </label>
+</div>
+<DialogRevisionWarning open={revisionWarning} setOpen={setRevisionWarning} />
 
           <div className="flex gap-7 justify-end">
             <Button variant="outline" className="bg-slate-300 ">
@@ -438,7 +464,7 @@ const PostJobs = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      <ClientFooter/>
     </div>
   );
 };

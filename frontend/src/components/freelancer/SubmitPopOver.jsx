@@ -60,8 +60,10 @@ const SubmitPopOver = ({ open, setOpen, jobId, refetchJobs }) => {
       if (res.data.success) {
         dispatch(setSelectedJob(res.data.job));
         toast.success(res.data.message);
+        setInput("")
         setOpen(false);
         refetchJobs();
+        
       }
     } catch (error) {
       console.log(error);

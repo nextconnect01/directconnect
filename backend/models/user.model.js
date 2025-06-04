@@ -73,9 +73,19 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    hiringAssistantStatus: {
+      type: String,
+      enum: ["Inactive", "Pending", "Accepted", "Rejected"],
+      default: "Inactive",
+    },
+    projectCompleted : {
+      type : Number,
+      default : 0
+    },
     skillProfile: {
       category: { type: String },
       subCategory: [{ type: String, default: [] }],
+      uspSkill: [{ type: String, default: [] }],
       resume: { type: String },
       resumeOriginalName: { type: String },
     },
@@ -99,11 +109,21 @@ const userSchema = new Schema(
         default: 0,
       },
     ],
+    rank: {
+      type: String,
+      default: "Not Calculated",
+    },
     activeJobs: [
       {
         type: Schema.Types.ObjectId,
         ref: "Job",
         default: 0,
+      },
+    ],
+    connectedClient: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
     yourRating: [

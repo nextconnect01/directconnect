@@ -198,3 +198,44 @@ export const getClientContacts = async (req, res) => {
       });
     }
   };
+
+  export const deleteConversation = async(req,res) => {
+    try {
+        const userId = req.id
+        const otherUserId =  req.params.id
+        const user = await User.findById(userId)
+        if(!user ){
+          return res.status(404).json({
+            message : "User Not Found",
+            success : false
+          })
+        }
+
+        const conversation = await Conversation.findOne({
+          participants : {$all : [userId,otherUserId]}
+        })
+
+        if(!conversation || conversation.length === 0){
+          return res.status(400).json({
+            message : "No Conversation Found Between the Two users",
+            success : false
+          })
+        }
+
+        await Message.deleteMany({_id : {$in : conversation?.messages}})
+        await Conversation.findByIdAndDelete(conversation?._id)
+
+        return res.status(200).json({
+          message : "Conversation And The Messages Deleted Successfully",
+          success : true
+        })
+        
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message : "Internal Server Error",
+        success : false
+      })
+      
+    }
+  }

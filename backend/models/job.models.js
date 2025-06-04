@@ -36,7 +36,7 @@ const jobSchema = new Schema(
         },
         status : {
             type : String,
-            enum : ["progress","completed","active","paused","disputes","specific"],
+            enum : ["progress","completed","active","paused","disputes","specific","review"],
             default : "active"
         },
         application : [{
@@ -50,10 +50,21 @@ const jobSchema = new Schema(
         },
         applicationDeadline : {
             type : Date,
+            required : true,
+        },
+        clientReviewDeadline : {
+            type : Date,
+        },
+        freelancerReviewDeadline : {
+            type : Date
+        },
+        reviewChance : {
+            type : Boolean,
+            default : false
         },
         budgetType : {
             type : String,
-            enum : ["fixed","hourly"],
+            enum : ["fixed","hourly","milestone"],
             default : "fixed"
         },
         category : {
@@ -65,6 +76,10 @@ const jobSchema = new Schema(
         },
         delivarables : {
             type : String
+        },
+        reviewChanges : {
+            type : String,
+            
         }
     },
     {timestamps:true}

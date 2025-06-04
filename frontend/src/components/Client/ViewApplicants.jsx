@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import Navbar from "../shared/Navbar";
-import { ArrowLeft, Briefcase, Check, Clock8, Star, X } from "lucide-react";
+import { ArrowLeft, Briefcase, Check, Clock8, IndianRupee, Star, X } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import RatingStars from "../shared/RatingStars";
 import { Button } from "../ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DialogUpdateStatus from "./DialogUpdateStatus";
 import RejectApplicationStatus from "./RejectApplicationStatus";
 import OpenProposal from "./OpenProposal";
 import DialogRejectStatus from "./DialogRejectStatus";
+import ClientFooter from "./ClientFooter";
+import { setSelectedUser, setUserContacts } from "@/redux/authSlice";
 
 const ViewApplicants = () => {
   const [updateStatus, setUpdateStatus] = useState(false);
@@ -19,13 +21,12 @@ const ViewApplicants = () => {
   const { selectedJob } = useSelector((store) => store.job);
   const [openProposal,setOpenProposal] = useState(false)
   const [application,setApplication] = useState("")
-
-
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   return (
     <div className="w-full h-full">
       <Navbar />
-      <div className="w-full  h-full bg-[#F5F5F5]">
+      <div className="w-full pb-10  h-full bg-[#F5F5F5]">
         <div className="w-full pt-5   flex justify-center">
           <div className="max-w-7xl w-full flex justify-between">
             <h1 className="font-bold">Job Applicants</h1>
@@ -48,7 +49,7 @@ const ViewApplicants = () => {
               <Badge className="bg-blue-200 text-blue-600" variant="outline">
                 {selectedJob?.status}
               </Badge>
-              <h1 className="font-bold">${selectedJob?.salary}</h1>
+              <h1 className="font-bold flex gap-1"><IndianRupee/>{selectedJob?.salary}</h1>
             </div>
             <div className="flex flex-col">
               <p className="text-sm">Due Date</p>
@@ -115,9 +116,10 @@ const ViewApplicants = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
+                   
                     <Button onClick={() => {setOpenProposal(true); setApplication(app)}} className="bg-blue-700 text-white" variant="outline">View Proposal</Button>
                     <Button onClick={() => {setRejectStatus(true); setApplication(app) }} className="bg-red-200 text-red-700" variant="outline">Reject</Button>
-                    <Button className="bg-green-200 text-green-700" variant="outline">Message</Button>
+                    <Button onClick={() => {dispatch(setUserContacts([app?.applicant?.[0]?.user])); dispatch(setSelectedUser(app?.applicant?.[0]?.user)); navigate("/message")}} className="bg-green-200 text-green-700" variant="outline">Message</Button>
                   </div>
                 </div>
                 <Badge variant="outline" className="h-[30px] bg-orange-100 text-orange-400" >Pending</Badge>
@@ -128,6 +130,7 @@ const ViewApplicants = () => {
           </div>
         </div>
       </div>
+      <ClientFooter/>
     </div>
   );
 };

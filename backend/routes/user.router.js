@@ -12,22 +12,27 @@ import {
     updateFileUploads,
     updatePassword,
     updateProfileDetails,
+    updateUserRole,
     verifyEmail,
 } from "../controllers/user.controller.js";
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
 import { multiUpload } from "../middleware/multer.middleware.js";
 import { applyAsMentor, getMentorship } from "../controllers/mentorship.controller.js";
+import { applyAsHiringAssistant, changeStatus, getAllHiringAssistant } from "../controllers/hiringAssistant.controller.js";
 
 const router = express.Router();
 
 router.route("/register").post(register);
 router.route("/login").post(login);
-router.route("/logout").get(logout);
+router.route("/logout").post(logout);
 router.route("/forget-password").post(forgetPassword);
 router.route("/recover-password").post(resetPassword)
 router.route("/verify-email").get(verifyEmail)
 
 // Safe Route or Authenticated Route
+router.route("/changeHiringStatus/:id").post(isAuthenticated,changeStatus)
+router.route("/getHiringAssistants").get(isAuthenticated,getAllHiringAssistant)
+router.route("/applyHiringAssistant").post(isAuthenticated,applyAsHiringAssistant)
 router.route("/userToUpdate").post(isAuthenticated,createUpdatedUsers)
 router.route("/applyAsMentor").post(isAuthenticated,applyAsMentor)
 router.route("/getMentorship").get(isAuthenticated,getMentorship)
@@ -36,7 +41,7 @@ router.route("/updateProfile").post(isAuthenticated, updateProfileDetails);
 router.route("/suggestedFreelancers").get(isAuthenticated,suggestedFreelancer)
 router.route("/updateFiles").post(isAuthenticated, multiUpload, updateFileUploads);
 router.route("/changePassword").post(isAuthenticated, updatePassword);
-
+router.route("/updateRole").post(isAuthenticated,updateUserRole)
 router.route("/set-password").put(isAuthenticated,setPasswordForGoogleUser)
 
 router.route("/profile").get(isAuthenticated, (req, res) => {

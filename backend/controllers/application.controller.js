@@ -1,6 +1,7 @@
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.models.js";
 import { Notification } from "../models/notification.models.js";
+import { Rank } from "../models/rank.model.js";
 import { User } from "../models/user.model.js";
 import { getRecieverSocketId, io } from "../socket.js";
 
@@ -27,7 +28,7 @@ export const applyJob = async (req, res) => {
       });
     }
 
-    const job = await Job.findById(jobId).populate({path : "owner"});
+    const job = await Job.findById(jobId).populate({ path: "owner" });
     if (!job) {
       return res.status(404).json({
         message: "No such job found",
@@ -76,6 +77,32 @@ export const applyJob = async (req, res) => {
     });
 
     // Add reference to user's proposals
+    const usersRank = await Rank.findOne({ userDetails: userId });
+    if (!usersRank) {
+      return res.status(404).json({
+        message: "Rank Of this User cannot be calculated",
+        success: false,
+      });
+    }
+    usersRank.conversionRate.totalProposals += 1;
+    usersRank.uspClearity.totalWorkDone += 1;
+    const normalize = (str) => str.toLowerCase().replace(/\s+/g, "");
+
+    const jobSkills = job?.skills?.map(normalize) || [];
+    const uspSkills = user?.skillProfile?.uspSkill?.map(normalize) || [];
+
+    const hasMatchingSkill = uspSkills.some((uspSkill) =>
+      jobSkills.includes(uspSkill)
+    );
+
+    if (hasMatchingSkill) {
+      usersRank.uspClearity.uspRelated += 1;
+    }
+
+    await usersRank.save();
+
+    
+
     await User.findByIdAndUpdate(userId, {
       $addToSet: { proposalsSent: newApplication._id },
     });
@@ -85,20 +112,18 @@ export const applyJob = async (req, res) => {
     await job.save();
 
     const notification = await Notification.create({
-      sendersDetail : userId,
-      recieversDetail : job?.owner?._id,
-      category : "Job",
-      message : `${user?.fullName} applied on ${job?.title} job`
-    })
+      sendersDetail: userId,
+      recieversDetail: job?.owner?._id,
+      category: "Job",
+      message: `${user?.fullName} applied on ${job?.title} job`,
+    });
 
-    const recieverSocketId = getRecieverSocketId(job?.owner?._id)
-    if(recieverSocketId){
-      io.to(recieverSocketId).emit('notification',notification)
-      console.log("Apply for job notification" , notification);
-      
+    const recieverSocketId = getRecieverSocketId(job?.owner?._id);
+    if (recieverSocketId) {
+      io.to(recieverSocketId).emit("notification", notification);
+      console.log("Apply for job notification", notification);
     }
 
-    
     return res.status(201).json({
       message: "Successfully Applied for the job",
       success: true,
@@ -232,13 +257,13 @@ export const getApplicant = async (req, res) => {
 
 export const updateStatus = async (req, res) => {
   try {
-    const userId = req.id
-    const user = await User.findById(userId)
-    if(!user){
+    const userId = req.id;
+    const user = await User.findById(userId);
+    if (!user) {
       return res.status(404).json({
-        message : "No Such User Found",
-        success : false
-      })
+        message: "No Such User Found",
+        success: false,
+      });
     }
 
     const { status } = req.body;
@@ -293,7 +318,7 @@ export const updateStatus = async (req, res) => {
           $addToSet: { activeJobs: job?._id },
         });
 
-        await User.findByIdAndUpdate(client._id, {
+        await User.findByIdAndUpdate(user._id, {
           $addToSet: {
             connectedFreelancers: {
               freelancer: applicantId,
@@ -306,6 +331,25 @@ export const updateStatus = async (req, res) => {
         await Job.findByIdAndUpdate(application?.job?._id, {
           freelancerAccepted: applicantId,
         });
+        console.log("application ki id", application?._id);
+        console.log("owner ki id", application?.owner);
+
+        await User.findByIdAndUpdate(applicantId, {
+          $addToSet: {
+            connectedClient: application?.owner,
+          },
+        });
+
+        const freelancer = await User.findById(applicantId);
+
+        const usersRank = await Rank.findOne({ userDetails: applicantId });
+        usersRank.rehireRate.totalWork += 1;
+        usersRank.conversionRate.acceptedProposals += 1;
+        if (freelancer?.connectedClient?.includes(application?.owner)) {
+          usersRank.rehireRate.sameClient += 1;
+        }
+
+        await usersRank.save();
       }
 
       if (job) {
@@ -314,28 +358,33 @@ export const updateStatus = async (req, res) => {
       }
 
       const notification = await Notification.create({
-        sendersDetails : userId,
-        recieversDetail : job?.freelancerAccepted,
-        category : "Job",
-        message : `${user?.fullName} has accepted you job application for ${job?.title}`
-      })
+        sendersDetails: userId,
+        recieversDetail: job?.freelancerAccepted,
+        category: "Job",
+        message: `${user?.fullName} has accepted you job application for ${job?.title}`,
+      });
       const applicant = application?.applicant[0]?.user;
       const recieverSocketId = getRecieverSocketId(job?.freelancerAccepted);
       console.log("👤 Applicant:", applicant);
-      console.log("📡 Receiver socket ID:", getRecieverSocketId(applicant.toString()));
+      console.log(
+        "📡 Receiver socket ID:",
+        getRecieverSocketId(applicant.toString())
+      );
 
       if (recieverSocketId) {
-        
         io.to(recieverSocketId).emit("notification", notification);
-        console.log("Client has accepted job application of the freelancer", notification);
+        console.log(
+          "Client has accepted job application of the freelancer",
+          notification
+        );
       }
 
       await Notification.create({
-        sendersDetail : client,
-        recieversDetail : applicant,
-        category : "Job",
-        message : `${client?.fullName} accepted your job application`
-      })
+        sendersDetail: client,
+        recieversDetail: applicant,
+        category: "Job",
+        message: `${client?.fullName} accepted your job application`,
+      });
     }
 
     await application.save();

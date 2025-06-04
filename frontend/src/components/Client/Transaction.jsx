@@ -15,9 +15,9 @@ const Transaction = () => {
         <div className="w-full flex justify-center ">
           <div className="mt-7 flex  justify-between w-full max-w-6xl ">
             <h1 className="font-bold text-2xl">Transaction Management</h1>
-            <Button variant="outline" className="bg-blue-600 transition-transform duration-300 hover:-translate-y-2 text-white p-4">
+            {/* <Button variant="outline" className="bg-blue-600 transition-transform duration-300 hover:-translate-y-2 text-white p-4">
               <Plus /> Add Transaction
-            </Button>
+            </Button> */}
           </div>
         </div>
         <div className="w-full flex justify-center ">
@@ -64,7 +64,7 @@ const Transaction = () => {
           </div>
         </div>
 
-        <div className="w-full flex justify-center ">
+        {/* <div className="w-full flex justify-center ">
           <div className="max-w-6xl mt-7 w-full bg-white shadow-2xl rounded-xl flex justify-between p-4">
             <div className="relative w-1/3">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -113,7 +113,7 @@ const Transaction = () => {
               </Select>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="w-full flex justify-center ">
           <div className="bg-slate-100 text-sm text-slate-600 p-4 mt-10 shadow-2xl rounded-lg w-full max-w-6xl grid grid-cols-7 gap-3">

@@ -114,6 +114,7 @@ const DialogProjectBrief = ({ open, setOpen,selectedUser }) => {
                   <SelectItem value="4week">4 week</SelectItem>
                   <SelectItem value="5week">5 week</SelectItem>
                   <SelectItem value="6week">6 week</SelectItem>
+                  <SelectItem value="morethan6week">More Than 6 week</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -140,7 +141,7 @@ const DialogProjectBrief = ({ open, setOpen,selectedUser }) => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="fixed">Fixed</SelectItem>
-                <SelectItem value="houlry">Hourly</SelectItem>
+                <SelectItem value="hourly">Hourly</SelectItem>
                 <SelectItem value="milestone">Milestone</SelectItem>
               </SelectContent>
             </Select>
